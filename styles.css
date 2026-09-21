@@ -673,6 +673,8 @@ section{padding:5.5rem 0;}
 .cta-band-light .amb-bar:nth-child(odd){fill:rgba(var(--teal-rgb),0.16);}
 .cta-band-light .amb-link{stroke:rgba(var(--teal-rgb),0.35);}
 .cta-band-light .amb-node{fill:rgba(var(--teal-rgb),0.55);}
+.cta-band-stacked .container{display:block;}
+.cta-band-stacked .container > div{max-width:60ch;}
 .cta-band h2{margin-bottom:0.3rem;}
 
 /* Contact */
@@ -938,3 +940,43 @@ html.skip-splash .splash-screen{display:none;}
   .splash-screen{transition:opacity .01s linear;}
   .splash-bar-fill{transition:none;}
 }
+
+/* =========================================================================
+   PHOTO PLACEHOLDERS
+   Marked spots where real photography can be dropped in later. Each one
+   states what kind of photo fits there and a suggested size. To replace
+   one: delete the placeholder .image-placeholder div and put an <img>
+   (or <div style="background-image:...">) in its place, at roughly the
+   dimensions noted inside it.
+   ========================================================================= */
+.image-placeholder{
+  border:2px dashed rgba(var(--teal-rgb),0.4);
+  border-radius:16px;
+  background:rgba(var(--teal-rgb),0.05);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:2.5rem 1.8rem;
+  min-height:280px;
+  color:var(--slate);
+}
+.image-placeholder svg{width:38px; height:38px; color:var(--teal-dark); margin-bottom:1rem;}
+.image-placeholder strong{display:block; color:var(--ink); font-size:0.95rem; margin-bottom:0.5rem;}
+.image-placeholder span{font-size:0.85rem; max-width:34ch; line-height:1.5;}
+.image-placeholder .dims{
+  display:inline-block; margin-top:0.9rem;
+  font-size:0.72rem; color:var(--teal-dark); font-weight:700;
+  letter-spacing:0.04em; text-transform:uppercase;
+  background:rgba(var(--teal-rgb),0.1);
+  padding:0.3rem 0.7rem; border-radius:999px;
+}
+
+/* Small circular version, used for client/testimonial headshots */
+.avatar-placeholder{
+  width:52px; height:52px; border-radius:50%;
+  border:2px dashed rgba(var(--teal-rgb),0.4);
+  background:rgba(var(--teal-rgb),0.05);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--teal-dark);
+  flex-shrink:0;
+}
+.avatar-placeholder svg{width:20px; height:20px;}
