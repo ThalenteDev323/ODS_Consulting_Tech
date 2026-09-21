@@ -1,0 +1,888 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root{
+  --ink:#020509;
+  --navy:#111315;        /* near-black, used for structural dark sections (How We Work, footer, CTA bands) */
+  --navy-rgb:17,19,21;
+  --navy-2:#0A0A0B;      /* darkest near-black */
+  --paper:#F6F5F1;
+  --paper-2:#EFEDE6;
+  --Colbut:#01A4A3;
+  --teal:#01A4A3;
+  --teal-dark:#018382;
+  --teal-rgb:1,164,163;
+  --slate:#5B6670;
+  --line:rgba(16,24,32,0.14);
+  --line-light:rgba(246,245,241,0.22);
+  --white:#FFFFFF;
+  --olanji:orange;
+  --maxw:1180px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,h4{
+  font-family:'IBM Plex Serif',serif;
+  font-weight:600;
+  line-height:1.15;
+  margin:0 0 0.5em 0;
+  color:var(--ink);
+}
+h1{font-size:clamp(2.4rem,5vw,4.4rem); font-weight:700; letter-spacing:-0.01em;}
+h2{font-size:clamp(1.9rem,3.4vw,2.8rem);}
+h3{font-size:1.4rem;}
+p{margin:0 0 1.1em 0; max-width:64ch;}
+a{color:inherit;}
+img{max-width:100%; display:block;}
+
+.container{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 2rem;
+  position:relative;
+  z-index:1;
+}
+
+section{padding:5.5rem 0;}
+@media(max-width:720px){ section{padding:3.5rem 0;} }
+
+.section-light{background:var(--paper);}
+.section-alt{background:var(--paper-2);}
+.section-dark{background:var(--teal); color:var(--paper); position:relative; overflow:hidden;}
+.section-dark h1,.section-dark h2,.section-dark h3{color:var(--white);}
+.section-dark p{color:rgba(255,255,255,0.88);}
+
+/* Ambient flowing-line background, reused across dark panes site-wide */
+.ambient-lines{
+  position:absolute; inset:0;
+  overflow:hidden; pointer-events:none; z-index:0;
+}
+.ambient-lines svg{width:100%; height:100%; display:block;}
+.flow-line{
+  fill:none;
+  stroke:rgba(255,255,255,0.16);
+  stroke-width:1.4;
+  stroke-dasharray:14 10;
+  animation:flow-move 7s linear infinite;
+}
+.flow-line.alt{
+  stroke:rgba(var(--teal-rgb),0.35);
+  animation-duration:10s;
+  animation-direction:reverse;
+}
+@keyframes flow-move{ to{ stroke-dashoffset:-240; } }
+@media(prefers-reduced-motion:reduce){
+  .flow-line{animation:none;}
+}
+
+/* Three richer animated background graphics, reusing the same visual
+   language as the homepage hero (drawing line chart / growing bars /
+   pulsing network), used on page headers, "How We Work", "Why
+   Together" and the CTA bands so the motion feels consistent as you
+   move through the site. Each runs on a continuous loop rather than
+   the hero's one-shot "on active" version. */
+
+/* Variant 1: drawing/flowing line chart */
+.ambient-chart .amb-line{
+  fill:none;
+  stroke:rgba(255,255,255,0.55);
+  stroke-width:2.5;
+  stroke-dasharray:18 14;
+  animation:flow-move 6s linear;
+}
+
+/* Variant 2: growing bars */
+.ambient-bars .amb-bar{
+  fill:rgba(255,255,255,0.35);
+  transform-origin:bottom;
+  transform-box:fill-box;
+  animation:pulse-bar 5.8s ease-in-out infinite;
+}
+.ambient-bars .amb-bar:nth-child(odd){fill:rgba(255,255,255,0.22);}
+.ambient-bars .amb-bar:nth-child(1){animation-delay:0s;}
+.ambient-bars .amb-bar:nth-child(2){animation-delay:.25s;}
+.ambient-bars .amb-bar:nth-child(3){animation-delay:.5s;}
+.ambient-bars .amb-bar:nth-child(4){animation-delay:.75s;}
+.ambient-bars .amb-bar:nth-child(5){animation-delay:1s;}
+.ambient-bars .amb-bar:nth-child(6){animation-delay:1.25s;}
+@keyframes pulse-bar{0%,100%{transform:scaleY(0.35);} 50%{transform:scaleY(1);}}
+
+/* Variant 3: pulsing network map */
+.ambient-network .amb-link{
+  stroke:rgba(255,255,255,0.3);
+  stroke-width:1.5;
+  stroke-dasharray:10 8;
+  animation:flow-move 5s linear infinite;
+}
+.ambient-network .amb-node{
+  fill:rgba(255,255,255,0.65);
+  animation:pulse-dot 3.2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:0.3;} 50%{opacity:1;}}
+
+@media(prefers-reduced-motion:reduce){
+  .ambient-chart .amb-line,
+  .ambient-bars .amb-bar,
+  .ambient-network .amb-link,
+  .ambient-network .amb-node{animation:none; opacity:0.5;}
+}
+
+.eyebrow{
+  font-size:0.85rem;
+  color:var(--teal-dark);
+  font-weight:600;
+  margin-bottom:0.9rem;
+  display:block;
+}
+.section-dark .eyebrow{color:var(--white);}
+
+/* Nav */
+.nav{
+  position:sticky; top:0; z-index:50;
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:1.1rem 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.logo{
+  font-family:'IBM Plex Serif',serif;
+  font-weight:700;
+  font-size:1.35rem;
+  color:var(--white);
+  text-decoration:none;
+  letter-spacing:0.01em;
+}
+.logo span{color:var(--teal);}
+.logo-img{height:52px; width: auto; display:block;}
+.menu-panel-head .logo-img{height:42px;}
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  list-style:none;
+  margin:0; padding:0;
+}
+.nav-links a{
+  color:var(--ink);
+  text-decoration:none;
+  font-size:0.95rem;
+  font-weight:500;
+  padding:0.6rem 0.9rem;
+  border-radius:4px;
+  transition:color .15s ease, background .15s ease;
+}
+.nav-links a:hover{background:rgba(var(--teal-rgb),0.14);}
+.nav-links a.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--teal);}
+
+/* "Company" dropdown inside the top nav (Why ODS / About / Our Values) */
+.nav-dropdown{position:relative;}
+.nav-dropdown-trigger{
+  display:inline-flex; align-items:center; gap:0.35rem;
+  background:none; border:none; cursor:pointer;
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:0.95rem; font-weight:500;
+  padding:0.6rem 0.9rem;
+  border-radius:4px;
+  transition:color .15s ease, background .15s ease;
+}
+.nav-dropdown-trigger:hover,
+.nav-dropdown-trigger[aria-expanded="true"]{background:rgba(var(--teal-rgb),0.14);}
+.nav-dropdown-trigger.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--teal);}
+.nav-dropdown-trigger .chevron{transition:transform .2s ease;}
+.nav-dropdown-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+.nav-dropdown-menu{
+  position:absolute; top:calc(100% + 12px); left:50%;
+  transform:translate(-50%,-8px);
+  min-width:190px;
+  background:rgba(255,255,255,0.68);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  border:1px solid rgba(255,255,255,0.4);
+  border-top:3px solid var(--teal);
+  border-radius:14px;
+  box-shadow:0 12px 28px rgba(2,5,9,0.10);
+  list-style:none; margin:0; padding:0.5rem; overflow:hidden;
+  opacity:0; visibility:hidden;
+  transition:opacity .18s ease, transform .18s ease;
+  z-index:60;
+}
+.nav-dropdown-menu.open{opacity:1; visibility:visible; transform:translate(-50%,0);}
+.nav-dropdown-menu li a{
+  display:block; padding:0.65rem 1rem;
+  font-size:0.95rem; color:var(--ink); text-decoration:none;
+  border-radius:8px; background:none;
+}
+.nav-dropdown-menu li a:hover, .nav-dropdown-menu li a.active{color:var(--teal-dark); background:rgba(var(--teal-rgb),0.10);}
+
+.nav-cta{
+  background:var(--white);
+  color:var(--navy-2);
+  padding:0.65rem 1.5rem;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:600;
+  font-size:0.92rem;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  transition:background .2s ease, transform .2s ease;
+}
+.nav-cta:hover{background:var(--teal-dark); transform:translateY(-1px);}
+.nav-cta svg{transition:transform .2s ease;}
+.nav-cta:hover svg{transform:translate(2px,-2px);}
+.nav-toggle{display:none;}
+
+/* On phones, the horizontal nav links + old right-side dropdown are
+   switched off entirely - the left-side "Menu" slide-in panel is the
+   only navigation method shown, so the two don't compete. The teal
+   "Get in touch" button stays visible for quick access. */
+@media(max-width:860px){
+  .nav-links{display:none;}
+  .nav-toggle{display:none;}
+}
+
+/* Left-side menu (secondary navigation) - full-height slide-in panel */
+.nav-left{display:flex; align-items:center; gap:1.2rem;}
+.menu-left{position:relative;}
+.menu-btn{
+  display:flex; align-items:center; gap:0.65rem;
+  background:none; border:none; cursor:pointer;
+  color:var(--ink);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:0.9rem; font-weight:600;
+  padding:0.4rem 0;
+}
+.menu-btn:hover{color:var(--olanji);}
+
+.waffle{
+  display:inline-grid;
+  grid-template-columns:repeat(3, 4px);
+  grid-template-rows:repeat(3, 4px);
+  gap:3px;
+  width:19px; height:19px;
+  flex-shrink:0;
+}
+.waffle span{
+  width:4px; height:4px;
+  border-radius:1px;
+  background:currentColor;
+  transition:transform .2s ease, opacity .2s ease;
+}
+.menu-btn[aria-expanded="true"]{color:var(--teal-dark);}
+.menu-btn[aria-expanded="true"] .waffle span{transform:scale(0.7); opacity:0.6;}
+
+.menu-overlay{
+  position:fixed; inset:0;
+  background:rgba(9,15,22,0.55);
+  backdrop-filter:blur(2px);
+  opacity:0; visibility:hidden;
+  transition:opacity .3s ease;
+  z-index:90;
+}
+.menu-overlay.open{opacity:1; visibility:visible;}
+
+.menu-panel{
+  position:fixed; top:0; left:0; height:100vh;
+  width:420px; max-width:88vw;
+ 
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  border-right:1px solid rgba(255,255,255,0.12);
+  border-radius:0 22px 22px 0;
+  box-shadow:8px 0 40px rgba(2,5,9,0.18);
+  transform:translateX(-100%);
+  transition:transform .4s cubic-bezier(.4,0,.2,1);
+  z-index:100;
+  overflow-y:auto;
+  padding:2.4rem 2.6rem 2.2rem 2.6rem;
+  display:flex; flex-direction:column;
+}
+.menu-panel.open{transform:translateX(0);}
+
+.menu-panel-head{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:3rem;
+}
+.menu-panel-head .logo{color:var(--white);}
+.menu-close{
+  background:none; border:none; color:var(--white);
+  font-size:1.9rem; line-height:1; cursor:pointer; padding:0;
+}
+.menu-close:hover{color:var(--teal);}
+
+.menu-links ul{list-style:none; margin:0; padding:0;}
+.menu-links li{
+  border-bottom:1px solid var(--line-light);
+  opacity:0; transform:translateX(-16px);
+  transition:opacity .4s ease, transform .4s ease;
+}
+.menu-panel.open .menu-links li{opacity:1; transform:translateX(0);}
+.menu-panel.open .menu-links li:nth-child(1){transition-delay:.10s;}
+.menu-panel.open .menu-links li:nth-child(2){transition-delay:.16s;}
+.menu-panel.open .menu-links li:nth-child(3){transition-delay:.22s;}
+.menu-panel.open .menu-links li:nth-child(4){transition-delay:.28s;}
+.menu-panel.open .menu-links li:nth-child(5){transition-delay:.34s;}
+.menu-panel.open .menu-links li:nth-child(6){transition-delay:.40s;}
+@media(prefers-reduced-motion:reduce){
+  .menu-links li{transition:none; opacity:1; transform:none;}
+}
+.menu-links li a{
+  display:block;
+  padding:1.05rem 0 1.05rem 0.9rem;
+  margin-left:-0.9rem;
+  font-family:'IBM Plex Serif',serif;
+  font-size:1.55rem;
+  font-weight:500;
+  color:var(--white);
+  text-decoration:none;
+  border-left:3px solid transparent;
+  transition:color .15s ease, border-color .15s ease, padding-left .15s ease;
+}
+.menu-links li a:hover, .menu-links li a.active{
+  color:var(--olanji);
+  border-left-color:var(--olanji);
+  padding-left:1.3rem;
+}
+
+.menu-panel-footer{
+  margin-top:auto; padding-top:2rem;
+  border-top:1px solid var(--olanji);
+}
+.menu-contact{font-size:0.95rem; margin-bottom:1.4rem; line-height:1.9;}
+.menu-contact a{color:rgba(246,245,241,0.85); text-decoration:none;}
+.menu-contact a:hover{color:var(--teal);}
+.menu-social{display:flex; gap:1.1rem;}
+.menu-social a{color:rgba(246,245,241,0.75);}
+.menu-social a:hover{color:var(--teal);}
+.menu-social svg{width:19px; height:19px; display:block;}
+
+@media(max-width:480px){
+  .menu-panel{padding:2rem 1.6rem;}
+  .menu-links li a{font-size:1.3rem;}
+}
+
+/* Buttons */
+.btn{
+  display:inline-block;
+  padding:0.9rem 1.9rem;
+  border-radius:999px;
+  text-decoration:none;
+  font-weight:600;
+  font-size:0.95rem;
+  border:1px solid transparent;
+  transition:all .15s ease;
+}
+.btn-primary{background:var(--teal); color:var(--navy-2);}
+.btn-primary:hover{background:var(--teal-dark);}
+.btn-outline{border-color:rgba(255,255,255,0.6); color:var(--white);}
+.btn-outline:hover{background:var(--white); color:var(--ink); border-color:var(--white);}
+.btn-outline-dark{border-color:var(--ink); color:var(--ink);}
+.btn-outline-dark:hover{border-color:var(--teal); color:var(--teal-dark); background:rgba(var(--teal-rgb),0.08);}
+.btn-row{display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.8rem;}
+
+/* On the teal hero specifically, a teal-filled primary button would
+   blend into the background - so buttons there flip to solid white
+   with dark text instead (a common, bold "GEICO-style" pattern of a
+   white pill button sitting on a bold color block). */
+.hero-slider .btn-primary{background:var(--white); color:var(--ink);}
+.hero-slider .btn-primary:hover{background:rgba(255,255,255,0.85);}
+
+/* Contact page "Send message" button - a more distinct, pill-shaped
+   variant of the primary button, with the same icon-nudge hover as
+   the "Get in touch" nav button for consistency. */
+.btn-send{
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  gap:0.55rem;
+  padding:0.85rem 1.9rem;
+  border:none;
+  cursor:pointer;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:background .2s ease, transform .2s ease;
+}
+.btn-send:hover{transform:translateY(-1px);}
+.btn-send svg{transition:transform .2s ease;}
+.btn-send:hover svg{transform:translate(2px,-2px);}
+.btn-send:disabled{opacity:0.7; cursor:default; transform:none;}
+
+/* Hero */
+.hero{padding:6.5rem 0 5rem 0;}
+.hero .container{max-width:900px;}
+.hero-meta{
+  display:flex; gap:2.5rem; flex-wrap:wrap;
+  margin-top:3rem; padding-top:2rem;
+  border-top:1px solid var(--line-light);
+}
+.hero-meta div{min-width:120px;}
+.hero-meta strong{
+  display:block; font-family:'IBM Plex Serif',serif;
+  font-size:1.8rem; color:var(--white); font-weight:600;
+}
+.hero-meta span{font-size:0.85rem; color:rgba(246,245,241,0.7);}
+
+/* Values row */
+.values-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:1.2rem;
+  margin-top:2.5rem;
+}
+.values-row .value{
+  padding:1.8rem 1.6rem;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--white);
+  box-shadow:0 4px 16px rgba(2,5,9,0.05);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.values-row .value:hover{transform:translateY(-3px); box-shadow:0 8px 22px rgba(2,5,9,0.08);}
+.values-row h3{font-size:1.05rem; margin-bottom:0.5rem;}
+.values-row p{font-size:0.92rem; color:var(--slate); margin:0;}
+@media(max-width:560px){ .values-row{grid-template-columns:1fr;} }
+
+/* Two column split */
+.split{
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:4rem;
+  align-items:start;
+}
+@media(max-width:860px){ .split{grid-template-columns:1fr; gap:2.5rem;} }
+
+/* Service list */
+.service-list{margin-top:2rem;}
+.service-item{
+  padding:2rem 0;
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:2rem;
+}
+.service-item:last-child{border-bottom:1px solid var(--line);}
+.service-item h3{margin-bottom:0.6rem;}
+.service-item p{margin:0; color:var(--slate);}
+@media(max-width:720px){
+  .service-item{grid-template-columns:1fr; gap:0.6rem;}
+}
+
+/* Process steps */
+.process{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:2.5rem;
+  margin-top:3rem;
+}
+.step-num{
+  font-family:'IBM Plex Serif',serif;
+  font-size:1.1rem;
+  color:var(--white);
+  border-bottom:1px solid var(--line-light);
+  padding-bottom:0.8rem;
+  margin-bottom:1rem;
+}
+@media(max-width:860px){ .process{grid-template-columns:1fr 1fr; gap:2rem;} }
+@media(max-width:560px){ .process{grid-template-columns:1fr;} }
+
+/* Testimonial */
+.testimonial{
+  border-left:4px solid var(--teal);
+  background:var(--paper-2);
+  border-radius:0 16px 16px 0;
+  padding:1.8rem 2rem;
+  margin:1.6rem 0;
+}
+.testimonial p{font-family:'IBM Plex Serif',serif; font-size:1.35rem; font-style:italic; color:var(--ink); max-width:56ch;}
+.testimonial cite{display:block; margin-top:1rem; font-style:normal; font-size:0.9rem; color:var(--slate);}
+
+/* Region strip */
+.region-strip{
+  display:flex; flex-wrap:wrap; gap:0;
+  margin-top:2rem;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.region-strip div{
+  flex:1; min-width:140px;
+  padding:1.3rem 1.5rem;
+  border-right:1px solid var(--line);
+  font-family:'IBM Plex Serif',serif;
+  font-size:1.05rem;
+}
+.region-strip div:last-child{border-right:none;}
+
+/* Logo placeholder grid */
+.logo-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.2rem;
+  margin-top:2rem;
+}
+.logo-slot{
+  border:1px dashed var(--line);
+  padding:2rem 1rem;
+  text-align:center;
+  font-size:0.82rem;
+  color:var(--slate);
+  border-radius:12px;
+}
+@media(max-width:720px){ .logo-grid{grid-template-columns:repeat(2,1fr);} }
+
+/* Services page: "What We Deliver" capability cards */
+.capability-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:1.4rem;
+  margin-top:2.2rem;
+}
+.capability-card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:2rem 1.6rem;
+  background:var(--white);
+  box-shadow:0 4px 16px rgba(2,5,9,0.05);
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.capability-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--teal);
+  box-shadow:0 10px 26px rgba(2,5,9,0.09);
+}
+.capability-icon{
+  width:46px; height:46px;
+  border-radius:50%;
+  background:rgba(var(--teal-rgb),0.10);
+  color:var(--teal-dark);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:1.1rem;
+}
+.capability-icon svg{width:22px; height:22px;}
+.capability-card h3{font-size:1.05rem; margin-bottom:0.5rem;}
+.capability-card p{font-size:0.92rem; color:var(--slate); margin:0;}
+
+/* Bulleted engagement lists on the Services page (replaces a dense paragraph) */
+.feature-list{list-style:none; margin:0 0 1.4rem 0; padding:0;}
+.feature-list li{
+  position:relative;
+  padding-left:1.4rem;
+  margin-bottom:0.6rem;
+  color:var(--slate);
+}
+.feature-list li::before{
+  content:"";
+  position:absolute; left:0; top:0.6em;
+  width:8px; height:2px;
+  background:var(--teal);
+}
+
+/* Contact page: live map embed */
+.contact-map{
+  margin-top:1.8rem;
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+.contact-map iframe{display:block;}
+
+
+/* CTA band */
+.cta-band{
+  background:var(--navy);
+  color:var(--white);
+  position:relative;
+  overflow:hidden;
+  padding:4.5rem 0;
+  text-align:left;
+}
+.cta-band .container{
+  display:flex; justify-content:space-between; align-items:center; gap:2rem; flex-wrap:wrap;
+}
+
+/* White variant - used on the Home and Why ODS pages, where this is the
+   final section directly above the footer. Same layout, but light instead
+   of black, with the ambient graphic recolored from white to teal so it
+   stays visible against the light background. */
+.cta-band-light{background:var(--white); color:var(--ink);}
+.cta-band-light h2{color:var(--ink);}
+.cta-band-light p{color:var(--slate);}
+.cta-band-light .amb-line{stroke:rgba(var(--teal-rgb),0.4);}
+.cta-band-light .amb-bar{fill:rgba(var(--teal-rgb),0.28);}
+.cta-band-light .amb-bar:nth-child(odd){fill:rgba(var(--teal-rgb),0.16);}
+.cta-band-light .amb-link{stroke:rgba(var(--teal-rgb),0.35);}
+.cta-band-light .amb-node{fill:rgba(var(--teal-rgb),0.55);}
+.cta-band h2{margin-bottom:0.3rem;}
+
+/* Contact */
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+}
+@media(max-width:860px){ .contact-grid{grid-template-columns:1fr;} }
+.contact-detail{margin-bottom:1.6rem;}
+.contact-detail .eyebrow{margin-bottom:0.3rem;}
+.contact-detail a{text-decoration:none; font-size:1.1rem;}
+
+form.contact-form{display:flex; flex-direction:column; gap:1.2rem;}
+.contact-form label{font-size:0.85rem; font-weight:600; margin-bottom:0.4rem; display:block;}
+.contact-form input, .contact-form textarea{
+  width:100%;
+  padding:0.85rem 1rem;
+  border:1px solid var(--line);
+  background:var(--white);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:0.95rem;
+  border-radius:2px;
+}
+.contact-form input:focus, .contact-form textarea:focus{outline:2px solid var(--teal); outline-offset:1px;}
+.contact-form button{align-self:flex-start;}
+.form-note{font-size:0.85rem; color:var(--slate); margin-top:0.8rem;}
+
+/* Footer */
+footer{
+  background:var(--navy-2);
+  color:rgba(246,245,241,0.75);
+  padding:2.2rem 0 1.3rem 0;
+  font-size:0.88rem;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr;
+  gap:2rem;
+  padding-bottom:1.6rem;
+  border-bottom:1px solid var(--olanji);
+}
+.footer-grid h4{color:var(--white); font-size:0.9rem; margin-bottom:0.7rem; font-family:'IBM Plex Sans',sans-serif; font-weight:600;}
+.footer-grid ul{list-style:none; margin:0; padding:0;}
+.footer-grid li{margin-bottom:0.4rem;}
+.footer-grid a{text-decoration:none; color:rgba(246,245,241,0.75);}
+.footer-grid a:hover{color:var(--teal);}
+.footer-bottom{padding-top:1rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.6rem; font-size:0.82rem;}
+@media(max-width:720px){ .footer-grid{grid-template-columns:1fr; gap:1.4rem;} }
+
+/* Reveal animation - single orchestrated entrance on hero only */
+.reveal{opacity:0; transform:translateY(14px); animation:reveal .7s ease forwards;}
+.reveal-1{animation-delay:.05s;}
+.reveal-2{animation-delay:.18s;}
+.reveal-3{animation-delay:.31s;}
+@keyframes reveal{to{opacity:1; transform:translateY(0);}}
+@media(prefers-reduced-motion:reduce){
+  .reveal{animation:none; opacity:1; transform:none;}
+  html{scroll-behavior:auto;}
+}
+
+/* Hero slideshow */
+.hero-slider{
+  position:relative;
+  min-height:640px;
+  background:var(--teal);
+  overflow:hidden;
+}
+@media(max-width:720px){ .hero-slider{min-height:560px;} }
+.slide{
+  position:absolute; inset:0;
+  display:flex; align-items:center;
+  opacity:0; visibility:hidden;
+  transition:opacity 1s ease;
+  z-index:1;
+}
+.slide.active{opacity:1; visibility:visible; position:relative; z-index:2;}
+.slide-visual{
+  position:absolute; inset:0;
+  z-index:0;
+  opacity:0.55;
+}
+.slide-visual svg{width:100%; height:100%;}
+.slide-content{
+  position:relative; z-index:1;
+  max-width:760px;
+}
+.slide .eyebrow{color:var(--white);}
+.slide h1{color:var(--white); font-size:clamp(2.2rem,4.6vw,4rem);}
+.slide p{color:rgba(246,245,241,0.85); font-size:1.1rem;}
+
+.chart-line{
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
+}
+.slide.active .chart-line{
+  animation:draw-line 1.8s ease forwards .3s;
+}
+@keyframes draw-line{to{stroke-dashoffset:0;}}
+
+.bar{transform-origin:bottom; transform:scaleY(0);}
+.slide.active .bar{animation:grow-bar 1s ease forwards;}
+.bar:nth-child(1){animation-delay:.2s !important;}
+.bar:nth-child(2){animation-delay:.35s !important;}
+.bar:nth-child(3){animation-delay:.5s !important;}
+.bar:nth-child(4){animation-delay:.65s !important;}
+.bar:nth-child(5){animation-delay:.8s !important;}
+@keyframes grow-bar{to{transform:scaleY(1);}}
+
+.node-dot{opacity:0; transform:scale(0);}
+.slide.active .node-dot{animation:pop-node .5s ease forwards;}
+.node-dot:nth-child(1){animation-delay:.2s !important;}
+.node-dot:nth-child(2){animation-delay:.4s !important;}
+.node-dot:nth-child(3){animation-delay:.6s !important;}
+.node-dot:nth-child(4){animation-delay:.8s !important;}
+@keyframes pop-node{to{opacity:1; transform:scale(1);}}
+.node-line{
+  stroke-dasharray:300; stroke-dashoffset:300;
+}
+.slide.active .node-line{animation:draw-line 1.2s ease forwards .3s;}
+
+@media(prefers-reduced-motion:reduce){
+  .chart-line,.bar,.node-dot,.node-line{animation:none !important; opacity:1; transform:none; stroke-dashoffset:0;}
+}
+
+.slide-dots{
+  position:absolute; bottom:1.8rem; left:0; right:0;
+  display:flex; justify-content:center; gap:0.6rem;
+  z-index:3;
+}
+.dot{
+  width:28px; height:3px;
+  border-radius:2px;
+  border:none;
+  background:rgba(246,245,241,0.35);
+  cursor:pointer;
+  padding:0;
+  transition:background .2s ease, width .3s ease;
+}
+.dot.active{background:var(--white); width:42px;}
+
+/* Intro stats (light background variant) */
+.intro-stats{
+  display:flex; gap:2.5rem; flex-wrap:wrap;
+  margin-top:2.5rem; padding-top:2rem;
+  border-top:1px solid var(--line);
+}
+.intro-stats div{min-width:120px;}
+.intro-stats strong{
+  display:block; font-family:'IBM Plex Serif',serif;
+  font-size:1.8rem; color:var(--teal-dark); font-weight:600;
+}
+.intro-stats span{font-size:0.85rem; color:var(--slate);}
+
+/* Page header (for inner pages) */
+.page-header{
+  padding:4.5rem 0 3.5rem 0;
+  position:relative;
+  overflow:hidden;
+  background:var(--teal); /* overrides the black .section-dark default - inner-page headers are bold teal, like the homepage hero */
+}
+.page-header p{font-size:1.15rem; color:rgba(255,255,255,0.9); max-width:60ch;}
+.page-header .eyebrow{color:var(--white);} /* overrides .section-dark's teal eyebrow, which would vanish on this teal background */
+
+/* Mini header slideshow (About/Services/Solutions/Clients/Contact) */
+.mini-slide-wrap{display:grid;}
+.mini-slide{
+  grid-area:1/1;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+.mini-slide.active{opacity:1; pointer-events:auto;}
+.mini-dots{display:flex; gap:0.6rem; margin-top:1.9rem;}
+
+/* =========================================================================
+   SCROLL PROGRESS BAR
+   A thin bar fixed to the very top of the screen. Its width is driven by
+   JavaScript to reflect how far down the page you've scrolled, and the
+   teal dashes inside continuously slide sideways for extra motion -
+   this is the "animated line/dash" effect that runs on every page.
+   ========================================================================= */
+.scroll-progress{
+  position:fixed; top:0; left:0; right:0;
+  height:4px;
+  background:rgba(var(--teal-rgb),0.18);
+  z-index:200;
+}
+.scroll-progress-bar{
+  height:100%; width:0%;
+  background-image:repeating-linear-gradient(
+    90deg,
+    var(--teal) 0px, var(--teal) 14px,
+    var(--teal-dark) 14px, var(--teal-dark) 22px
+  );
+  background-size:200% 100%;
+  animation:scroll-dash-slide 2.4s linear infinite;
+  transition:width .1s linear;
+}
+@keyframes scroll-dash-slide{
+  0%{background-position:0 0;}
+  100%{background-position:-72px 0;}
+}
+@media(prefers-reduced-motion:reduce){
+  .scroll-progress-bar{animation:none; background-image:none; background-color:var(--teal);}
+}
+
+/* =========================================================================
+   SPLASH SCREEN
+   A full-screen white/paper overlay shown briefly when the site is first
+   opened: the ODS icon, then an animated loading bar. Controlled by
+   script.js (search for "SPLASH SCREEN"). Shown once per browser session -
+   see the inline script in <head> and the .skip-splash rule below.
+   ========================================================================= */
+.splash-screen{
+  position:fixed; inset:0;
+  z-index:500;
+  background:var(--paper);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2rem;
+  opacity:1; visibility:visible;
+  transition:opacity .45s ease, visibility 0s linear 0s;
+}
+.splash-screen.splash-hide{
+  opacity:0; visibility:hidden;
+  transition:opacity .45s ease, visibility 0s linear .45s;
+}
+/* Already shown this session - skip instantly, no flash on page navigation */
+html.skip-splash .splash-screen{display:none;}
+
+.splash-icon{
+  width:96px; height:auto;
+  animation:splash-pop .5s ease;
+}
+@keyframes splash-pop{
+  0%{opacity:0; transform:scale(0.85);}
+  100%{opacity:1; transform:scale(1);}
+}
+
+.splash-bar{
+  width:180px; height:4px;
+  border-radius:999px;
+  background:rgba(var(--teal-rgb),0.15);
+  overflow:hidden;
+}
+.splash-bar-fill{
+  height:100%; width:0%;
+  border-radius:999px;
+  background:linear-gradient(90deg, var(--teal), var(--teal-dark));
+  transition:width 1.6s cubic-bezier(.4,0,.2,1);
+}
+.splash-bar-fill.fill{width:100%;}
+
+@media(prefers-reduced-motion:reduce){
+  .splash-icon{animation:none;}
+  .splash-screen{transition:opacity .01s linear;}
+  .splash-bar-fill{transition:none;}
+}
