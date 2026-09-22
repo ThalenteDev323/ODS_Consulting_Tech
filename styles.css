@@ -11,6 +11,7 @@
   --teal:#01A4A3;
   --teal-dark:#018382;
   --teal-rgb:1,164,163;
+  --olanji:orange;
   --slate:#5B6670;
   --line:rgba(16,24,32,0.14);
   --line-light:rgba(246,245,241,0.22);
@@ -51,6 +52,14 @@ img{max-width:100%; display:block;}
   position:relative;
   z-index:1;
 }
+
+.slide-photo{width:100%; height:100%; object-fit:cover; display:block;}
+.slide-photo-overlay{
+  position:absolute; inset:0;
+  /*background:linear-gradient(90deg, rgba(1,164,163,0.88), rgba(1,164,163,0.55));
+*/}
+
+
 
 section{padding:5.5rem 0;}
 @media(max-width:720px){ section{padding:3.5rem 0;} }
@@ -170,6 +179,7 @@ section{padding:5.5rem 0;}
 .logo span{color:var(--teal);}
 .logo-img{height:52px; width:auto; display:block;}
 .menu-panel-head .logo-img{height:42px;}
+.footer-grid .logo-img{height:38px;}
 .nav-links{
   display:flex;
   align-items:center;
@@ -231,7 +241,7 @@ section{padding:5.5rem 0;}
 .nav-dropdown-menu li a:hover, .nav-dropdown-menu li a.active{color:var(--teal-dark); background:rgba(var(--teal-rgb),0.10);}
 
 .nav-cta{
-  background:var(--teal);
+  background:var(--white);
   color:var(--navy-2);
   padding:0.65rem 1.5rem;
   border-radius:999px;
@@ -269,7 +279,7 @@ section{padding:5.5rem 0;}
   font-size:0.9rem; font-weight:700;
   padding:0.4rem 0;
 }
-.menu-btn:hover{color:var(--teal-dark);}
+.menu-btn:hover{color:var(--olanji);}
 
 .waffle{
   display:inline-grid;
@@ -301,7 +311,6 @@ section{padding:5.5rem 0;}
 .menu-panel{
   position:fixed; top:0; left:0; height:100vh;
   width:420px; max-width:88vw;
-  background:rgba(var(--navy-rgb),0.86); color:var(--white);
   backdrop-filter:blur(18px) saturate(140%);
   -webkit-backdrop-filter:blur(18px) saturate(140%);
   border-right:1px solid rgba(255,255,255,0.12);
@@ -356,14 +365,14 @@ section{padding:5.5rem 0;}
   transition:color .15s ease, border-color .15s ease, padding-left .15s ease;
 }
 .menu-links li a:hover, .menu-links li a.active{
-  color:var(--teal-dark);
-  border-left-color:var(--teal-dark);
+  color:var(--olanji);
+  border-left-color:var(--olanji);
   padding-left:1.3rem;
 }
 
 .menu-panel-footer{
   margin-top:auto; padding-top:2rem;
-  border-top:1px solid var(--line-light);
+  border-top:1px solid var(--olanji);
 }
 .menu-contact{font-size:0.95rem; margin-bottom:1.4rem; line-height:1.9;}
 .menu-contact a{color:rgba(246,245,241,0.85); text-decoration:none;}
@@ -715,7 +724,7 @@ footer{
   grid-template-columns:2fr 1fr 1fr;
   gap:2rem;
   padding-bottom:1.6rem;
-  border-bottom:1px solid var(--line-light);
+  border-bottom:1px solid var(--olanji);
 }
 .footer-grid h4{color:var(--white); font-size:0.9rem; margin-bottom:0.7rem; font-family:'Roboto','Trebuchet MS',Calibri,Arial,Helvetica,sans-serif; font-weight:700;}
 .footer-grid ul{list-style:none; margin:0; padding:0;}
@@ -892,9 +901,14 @@ footer{
 /* =========================================================================
    SPLASH SCREEN
    A full-screen white/paper overlay shown briefly when the site is first
-   opened: the ODS icon, then an animated loading bar. Controlled by
-   script.js (search for "SPLASH SCREEN"). Shown once per browser session -
-   see the inline script in <head> and the .skip-splash rule below.
+   opened: the ODS icon, then an animated loading bar. Deliberately built
+   to hide ITSELF via a plain CSS animation (see splash-sequence below) -
+   it does NOT wait on JavaScript to remove it. That way, even if
+   something goes wrong in script.js (e.g. a browser blocking
+   sessionStorage when a page is opened directly from disk instead of a
+   real server), the splash still disappears on its own and never gets
+   stuck covering the page. JS is only used for the optional "don't show
+   again this session" behaviour - see script.js, "SPLASH SCREEN".
    ========================================================================= */
 .splash-screen{
   position:fixed; inset:0;
@@ -902,15 +916,17 @@ footer{
   background:var(--paper);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:2rem;
-  opacity:1; visibility:visible;
-  transition:opacity .45s ease, visibility 0s linear 0s;
-}
-.splash-screen.splash-hide{
-  opacity:0; visibility:hidden;
-  transition:opacity .45s ease, visibility 0s linear .45s;
+  animation:splash-sequence 2.2s ease forwards;
+  pointer-events:none; /* never blocks clicks, even before the animation finishes */
 }
 /* Already shown this session - skip instantly, no flash on page navigation */
 html.skip-splash .splash-screen{display:none;}
+
+@keyframes splash-sequence{
+  0%{opacity:1; visibility:visible;}
+  80%{opacity:1; visibility:visible;}
+  100%{opacity:0; visibility:hidden;}
+}
 
 .splash-icon{
   width:96px; height:auto;
@@ -931,14 +947,14 @@ html.skip-splash .splash-screen{display:none;}
   height:100%; width:0%;
   border-radius:999px;
   background:linear-gradient(90deg, var(--teal), var(--teal-dark));
-  transition:width 1.6s cubic-bezier(.4,0,.2,1);
+  animation:splash-bar-fill 1.6s cubic-bezier(.4,0,.2,1) forwards;
 }
-.splash-bar-fill.fill{width:100%;}
+@keyframes splash-bar-fill{ to{ width:100%; } }
 
 @media(prefers-reduced-motion:reduce){
+  .splash-screen{animation:none; opacity:0; visibility:hidden;}
   .splash-icon{animation:none;}
-  .splash-screen{transition:opacity .01s linear;}
-  .splash-bar-fill{transition:none;}
+  .splash-bar-fill{animation:none;}
 }
 
 /* =========================================================================
