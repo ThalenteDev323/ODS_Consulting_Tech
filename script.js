@@ -10,35 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ------------------------------------------------------------
   // 0) SPLASH SCREEN
-  // Shows once per browser session (the inline script in <head>
-  // already hid it instantly via CSS on repeat page loads within
-  // the same session - this block only runs the animated version
-  // the first time). Sequence: fill the loading bar over ~1.6s,
-  // hold briefly, fade the whole screen out - finished well under
-  // 3 seconds total - then unlock page scroll and remember it's
-  // been shown so it doesn't appear again this session.
+  // No JS needed here at all - the splash's whole show/fade-out
+  // sequence runs as a plain CSS animation (see ".splash-screen"
+  // and "@keyframes splash-sequence" in styles.css), so it plays
+  // the same way on every single page load/refresh, and it can
+  // never get "stuck" even if something else on the page errors.
   // ------------------------------------------------------------
-  var splash = document.getElementById('splashScreen');
-  if (splash && !document.documentElement.classList.contains('skip-splash')) {
-    var splashBarFill = document.getElementById('splashBarFill');
-    document.body.style.overflow = 'hidden';
-
-    // Start the bar filling on the next frame (so the CSS transition animates
-    // from 0% rather than jumping straight to 100%).
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        if (splashBarFill) splashBarFill.classList.add('fill');
-      });
-    });
-
-    setTimeout(function () {
-      splash.classList.add('splash-hide');
-      sessionStorage.setItem('odsSplashShown', '1');
-      document.body.style.overflow = '';
-    }, 1800);
-  } else if (splash) {
-    splash.style.display = 'none';
-  }
 
   // ------------------------------------------------------------
   // 1) LEFT-SIDE SLIDE-IN MENU (the "Menu" burger button + panel)
@@ -319,5 +296,122 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', updateProgress);
     updateProgress();
+  }
+
+  // ------------------------------------------------------------
+  // 6) ANIMATED STAT COUNTERS
+  // The "16+ / 4 / 2" numbers in the homepage intro section. Each
+  // one has a data-count-to="16" attribute (and an optional
+  // data-suffix="+") in the HTML. When the numbers scroll into
+  // view, they count up from 0 to that target over about 1.4
+  // seconds, then stay put - each one only ever runs once.
+  // ------------------------------------------------------------
+  var reduceMotionGlobal = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var counters = document.querySelectorAll('[data-count-to]');
+  if (counters.length) {
+    var animateCounter = function (el) {
+      var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+      var suffix = el.getAttribute('data-suffix') || '';
+      if (reduceMotionGlobal) {
+        el.textContent = target + suffix;
+        return;
+      }
+      var duration = 1400;
+      var startTime = null;
+      function step(timestamp) {
+        if (startTime === null) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        // ease-out so it starts fast and settles gently on the final number
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    };
+
+    if ('IntersectionObserver' in window) {
+      var counterObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(function (el) { counterObserver.observe(el); });
+    } else {
+      // No IntersectionObserver support - just show the final numbers.
+      counters.forEach(function (el) {
+        var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+        el.textContent = target + (el.getAttribute('data-suffix') || '');
+      });
+    }
+  }
+
+  // ------------------------------------------------------------
+  // 7) SUBTLE PARALLAX ON THE HERO GRAPHICS
+  // As the mouse moves over the homepage hero, its background
+  // graphic (line chart / bars / network) shifts a few pixels in
+  // the same direction - a common "depth" effect. Skipped
+  // entirely if the visitor has reduced motion turned on, and
+  // naturally does nothing on touch devices (no mouse to move).
+  // ------------------------------------------------------------
+  var heroForParallax = document.getElementById('hero-slider');
+  if (heroForParallax && !reduceMotionGlobal) {
+    var maxShift = 14; // pixels - kept small so it reads as "subtle"
+    heroForParallax.addEventListener('mousemove', function (e) {
+      var rect = heroForParallax.getBoundingClientRect();
+      var relX = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 to 0.5
+      var relY = (e.clientY - rect.top) / rect.height - 0.5;
+      var px = (relX * maxShift * 2).toFixed(1) + 'px';
+      var py = (relY * maxShift * 2).toFixed(1) + 'px';
+      heroForParallax.querySelectorAll('.slide-visual').forEach(function (visual) {
+        visual.style.setProperty('--px', px);
+        visual.style.setProperty('--py', py);
+      });
+    });
+    heroForParallax.addEventListener('mouseleave', function () {
+      heroForParallax.querySelectorAll('.slide-visual').forEach(function (visual) {
+        visual.style.setProperty('--px', '0px');
+        visual.style.setProperty('--py', '0px');
+      });
+    });
+  }
+
+  // ------------------------------------------------------------
+  // 8) ANIMATED "HOW WE WORK" DIAGRAM
+  // The four steps (Discover / Adapt / Analyse / Train) start
+  // dimmed. As each one scrolls into view it "lights up" (its
+  // circle badge fills solid white, its text brightens), and the
+  // connecting line behind them fills in step by step, so the
+  // diagram builds itself as you scroll down the section.
+  // ------------------------------------------------------------
+  var processSteps = document.querySelectorAll('.process-step');
+  var processTrackFill = document.getElementById('processTrackFill');
+  if (processSteps.length) {
+    if (reduceMotionGlobal || !('IntersectionObserver' in window)) {
+      processSteps.forEach(function (step) { step.classList.add('active'); });
+      if (processTrackFill) { processTrackFill.style.width = '100%'; processTrackFill.style.height = '100%'; }
+    } else {
+      var highestStepReached = 0;
+      var stepObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            var stepNum = parseInt(entry.target.getAttribute('data-step'), 10) || 0;
+            if (stepNum > highestStepReached) {
+              highestStepReached = stepNum;
+              var pct = (highestStepReached / processSteps.length) * 100 + '%';
+              if (processTrackFill) {
+                processTrackFill.style.width = pct;
+                processTrackFill.style.height = pct;
+              }
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6 });
+      processSteps.forEach(function (step) { stepObserver.observe(step); });
+    }
   }
 });
