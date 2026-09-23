@@ -261,9 +261,20 @@ document.addEventListener('DOMContentLoaded', function () {
   // To make this real, connect the form to a service like
   // Formspree (or your own backend/CRM) - see the note in
   // contact.html for where that would go.
+  //
+  // The Subject field auto-fills when arriving via a link like
+  // contact.html?subject=Enquiry%20for%20Power%20BI - this is how
+  // the "Talk to us about..." buttons on the Services page work.
   // ------------------------------------------------------------
   var form = document.querySelector('.contact-form');
   if (form) {
+    var subjectField = document.getElementById('subject');
+    if (subjectField) {
+      var params = new URLSearchParams(window.location.search);
+      var subjectFromUrl = params.get('subject');
+      if (subjectFromUrl) subjectField.value = subjectFromUrl;
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault(); // stop the default page-reload behaviour
       var btn = form.querySelector('button');
@@ -413,5 +424,56 @@ document.addEventListener('DOMContentLoaded', function () {
       }, { threshold: 0.6 });
       processSteps.forEach(function (step) { stepObserver.observe(step); });
     }
+  }
+
+  // ------------------------------------------------------------
+  // 9) CAPABILITY DETAIL PANES (Services page "What We Deliver")
+  // Each card has a data-modal="..." attribute matching one pane's
+  // id ("modal-tm1" etc). Clicking (or pressing Enter/Space on) a
+  // card opens its pane over a dark backdrop; clicking the backdrop,
+  // the X button, or pressing Escape closes whichever is open.
+  // ------------------------------------------------------------
+  var capabilityCards = document.querySelectorAll('.capability-card[data-modal]');
+  var modalOverlay = document.getElementById('modalOverlay');
+  if (capabilityCards.length && modalOverlay) {
+    var openPane = null;
+
+    function closePane() {
+      if (!openPane) return;
+      openPane.classList.remove('open');
+      modalOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      openPane = null;
+    }
+
+    function openPaneById(id) {
+      var pane = document.getElementById('modal-' + id);
+      if (!pane) return;
+      if (openPane) closePane();
+      pane.classList.add('open');
+      modalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      openPane = pane;
+    }
+
+    capabilityCards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        openPaneById(card.getAttribute('data-modal'));
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPaneById(card.getAttribute('data-modal'));
+        }
+      });
+    });
+
+    document.querySelectorAll('.modal-close').forEach(function (btn) {
+      btn.addEventListener('click', closePane);
+    });
+    modalOverlay.addEventListener('click', closePane);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closePane();
+    });
   }
 });
