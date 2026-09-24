@@ -7,8 +7,8 @@
   --navy-2:#0A0A0B;      /* darkest near-black */
   --paper:#F6F5F1;
   --paper-rgb:246,245,241;
-  --paper-2:#EFEDE6;
-  --paper-2-rgb:239,237,230;
+  --paper-2:#DAD5CD;
+  --paper-2-rgb:218,213,205;
   --Colbut:#01A4A3;
   --teal:#01A4A3;
   --teal-dark:#018382;
@@ -26,7 +26,7 @@
 html{scroll-behavior:smooth;}
 body{
   margin:0;
-  background:var(--paper) url('Assets/MeetingRoom.jpg') center center / cover no-repeat fixed;
+  background:var(--paper);
   color:var(--ink);
   font-family:'Roboto','Trebuchet MS',Calibri,Arial,Helvetica,sans-serif;
   font-size:16px;
@@ -59,8 +59,8 @@ img{max-width:100%; display:block;}
 section{padding:5.5rem 0;}
 @media(max-width:720px){ section{padding:3.5rem 0;} }
 
-.section-light{background:rgba(var(--paper-rgb),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
-.section-alt{background:rgba(var(--paper-2-rgb),0.87); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
+.section-light{background:rgba(var(whitesmoke),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
+.section-alt{background:rgba(var(whitesmoke),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
 .section-dark{background:rgba(var(--teal-rgb),0.82); color:var(--paper); position:relative; overflow:hidden; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
 .section-dark h1,.section-dark h2,.section-dark h3{color:var(--white);}
 .section-dark p{color:rgba(255,255,255,0.88);}
@@ -579,7 +579,7 @@ section{padding:5.5rem 0;}
 /* Testimonial */
 .testimonial{
   border-left:4px solid var(--teal);
-  background:var(--paper-2);
+  background:#FAF7F2;
   border-radius:0 16px 16px 0;
   padding:1.8rem 2rem;
   margin:1.6rem 0;
@@ -618,7 +618,18 @@ section{padding:5.5rem 0;}
   color:var(--slate);
   border-radius:12px;
 }
-@media(max-width:720px){ .logo-grid{grid-template-columns:repeat(2,1fr);} }
+.logo-grid-3{grid-template-columns:repeat(3,1fr);}
+.logo-slot-filled{
+  border:1px solid var(--line);
+  background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  padding:2.2rem 1.5rem;
+  box-shadow:0 4px 16px rgba(2,5,9,0.05);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.logo-slot-filled:hover{transform:translateY(-3px); box-shadow:0 8px 22px rgba(2,5,9,0.08);}
+.logo-slot-filled img{max-height:48px; width:auto; max-width:100%;}
+@media(max-width:720px){ .logo-grid{grid-template-columns:repeat(2,1fr);} .logo-grid-3{grid-template-columns:repeat(2,1fr);} }
 
 /* Services page: "What We Deliver" capability cards */
 .capability-grid{
@@ -779,7 +790,11 @@ footer{
 .footer-grid li{margin-bottom:0.4rem;}
 .footer-grid a{text-decoration:none; color:rgba(246,245,241,0.75);}
 .footer-grid a:hover{color:var(--teal);}
-.footer-bottom{padding-top:1rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.6rem; font-size:0.82rem;}
+.footer-bottom{padding-top:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; font-size:0.82rem;}
+.footer-social{display:flex; gap:1rem;}
+.footer-social a{color:rgba(246,245,241,0.75);}
+.footer-social a:hover{color:var(--teal);}
+.footer-social svg{width:18px; height:18px; display:block;}
 @media(max-width:720px){ .footer-grid{grid-template-columns:1fr; gap:1.4rem;} }
 
 /* Reveal animation - single orchestrated entrance on hero only */
@@ -1144,3 +1159,7 @@ html.skip-splash .splash-screen{display:none;}
 @media(prefers-reduced-motion:reduce){
   .modal-overlay, .modal-pane{transition:none;}
 }
+
+/* Stylish "corner bracket" photo frame - like a viewfinder - used on
+   the TM1 and Power BI screenshots in "Platforms in Depth". */
+.corner-frame img{display:block; width:100%; border-radius:20px;}
