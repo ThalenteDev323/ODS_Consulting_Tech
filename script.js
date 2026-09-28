@@ -427,53 +427,122 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 9) CAPABILITY DETAIL PANES (Services page "What We Deliver")
-  // Each card has a data-modal="..." attribute matching one pane's
-  // id ("modal-tm1" etc). Clicking (or pressing Enter/Space on) a
-  // card opens its pane over a dark backdrop; clicking the backdrop,
-  // the X button, or pressing Escape closes whichever is open.
+  // 9) POP-UP PANES THAT OPEN ON HOVER
+  // Used by the Services "What We Deliver" cards and the Our Values
+  // cards. Each card has data-modal="tm1" (or "clarity" etc) that
+  // matches a pane with id="modal-tm1". On a computer with a mouse:
+  //   - resting the pointer on a card for a moment opens its pane
+  //     (the tiny delay stops panes flashing open as you sweep past)
+  //   - it stays open while the pointer is on the card OR the pane,
+  //     and closes a moment after the pointer leaves both
+  //   - moving onto another card that's still visible switches panes
+  //   - the page is NOT locked and the dim layer lets the mouse through,
+  //     so nothing jumps around
+  // On phones/tablets (no hover) a tap opens the pane like a normal
+  // pop-up: the backdrop blocks the page, tap it (or the X) to close.
+  // Keyboard: Tab to a card, Enter/Space opens it, Escape closes it.
   // ------------------------------------------------------------
-  var capabilityCards = document.querySelectorAll('.capability-card[data-modal]');
-  var modalOverlay = document.getElementById('modalOverlay');
-  if (capabilityCards.length && modalOverlay) {
-    var openPane = null;
+  var hoverCards = document.querySelectorAll('.value-card[data-modal], .capability-card[data-modal]');
+  var hoverOverlay = document.getElementById('modalOverlay');
+  if (hoverCards.length && hoverOverlay) {
+    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var vOpenCard = null, vOpenPane = null, vPinned = false, vScrollAt = 0;
+    var vOpenTimer, vCloseTimer;
+    var vMouseX = -1, vMouseY = -1, vSuppressCard = null;
 
-    function closePane() {
-      if (!openPane) return;
-      openPane.classList.remove('open');
-      modalOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-      openPane = null;
+    if (canHover) hoverOverlay.classList.add('is-hover');
+
+    // Remember where the mouse is, so that when the visitor dismisses a pane (X / Escape) we can tell
+    // which card is sitting under the pointer and NOT instantly re-open it.
+    document.addEventListener('mousemove', function (e) { vMouseX = e.clientX; vMouseY = e.clientY; }, { passive: true });
+
+    function vCardUnderPointer() {
+      if (vMouseX < 0) return null;
+      var els = document.elementsFromPoint(vMouseX, vMouseY);
+      for (var i = 0; i < els.length; i++) {
+        var c = els[i].closest ? els[i].closest('.value-card, .capability-card') : null;
+        if (c) return c;
+      }
+      return null;
     }
 
-    function openPaneById(id) {
-      var pane = document.getElementById('modal-' + id);
+    function vClose() {
+      clearTimeout(vOpenTimer);
+      clearTimeout(vCloseTimer);
+      if (!vOpenPane) return;
+      vOpenPane.classList.remove('open');
+      hoverOverlay.classList.remove('open');
+      if (!canHover) document.body.style.overflow = '';
+      vOpenPane = null; vOpenCard = null; vPinned = false;
+    }
+
+    function vCloseByVisitor() {
+      vSuppressCard = canHover ? vCardUnderPointer() : null;
+      vClose();
+    }
+
+    function vOpen(card, pin) {
+      var pane = document.getElementById('modal-' + card.getAttribute('data-modal'));
       if (!pane) return;
-      if (openPane) closePane();
+      clearTimeout(vCloseTimer);
+      if (vOpenPane && vOpenPane !== pane) vOpenPane.classList.remove('open');
       pane.classList.add('open');
-      modalOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      openPane = pane;
+      hoverOverlay.classList.add('open');
+      if (!canHover) document.body.style.overflow = 'hidden';
+      vOpenPane = pane; vOpenCard = card; vPinned = !!pin;
+      vScrollAt = window.pageYOffset;
     }
 
-    capabilityCards.forEach(function (card) {
-      card.addEventListener('click', function () {
-        openPaneById(card.getAttribute('data-modal'));
-      });
+    function vScheduleClose() {
+      clearTimeout(vCloseTimer);
+      if (vPinned) return;              // opened with the keyboard: stays until Escape / X
+      vCloseTimer = setTimeout(vClose, 220);
+    }
+
+    hoverCards.forEach(function (card) {
+      if (canHover) {
+        card.addEventListener('mouseenter', function () {
+          if (card === vSuppressCard) return;          // just dismissed while over this card
+          clearTimeout(vCloseTimer);
+          if (vOpenCard === card) return;
+          clearTimeout(vOpenTimer);
+          // brief pause before opening; switch instantly if another pane is already open
+          vOpenTimer = setTimeout(function () { vOpen(card, false); }, vOpenPane ? 0 : 140);
+        });
+        card.addEventListener('mouseleave', function () {
+          if (card === vSuppressCard) vSuppressCard = null;
+          clearTimeout(vOpenTimer);
+          vScheduleClose();
+        });
+      }
+      card.addEventListener('click', function () { vOpen(card, false); });
       card.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          openPaneById(card.getAttribute('data-modal'));
+          vOpen(card, true);
         }
       });
     });
 
-    document.querySelectorAll('.modal-close').forEach(function (btn) {
-      btn.addEventListener('click', closePane);
+    document.querySelectorAll('.modal-pane').forEach(function (pane) {
+      pane.addEventListener('mouseenter', function () { clearTimeout(vCloseTimer); });
+      pane.addEventListener('mouseleave', function () { if (canHover) vScheduleClose(); });
     });
-    modalOverlay.addEventListener('click', closePane);
+    document.querySelectorAll('.modal-pane .modal-close').forEach(function (btn) {
+      btn.addEventListener('click', vCloseByVisitor);
+    });
+    hoverOverlay.addEventListener('click', vClose);           // phones/tablets: tap the backdrop
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closePane();
+      if (e.key === 'Escape') vCloseByVisitor();
     });
+    document.addEventListener('click', function (e) {         // click anywhere else closes it
+      if (!vOpenPane) return;
+      if (vOpenPane.contains(e.target)) return;
+      if (e.target.closest && e.target.closest('.value-card, .capability-card')) return;
+      vClose();
+    });
+    window.addEventListener('scroll', function () {           // scrolling the page away closes it
+      if (canHover && vOpenPane && Math.abs(window.pageYOffset - vScrollAt) > 40) vClose();
+    }, { passive: true });
   }
 });
