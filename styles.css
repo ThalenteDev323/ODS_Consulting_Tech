@@ -59,8 +59,8 @@ img{max-width:100%; display:block;}
 section{padding:5.5rem 0;}
 @media(max-width:720px){ section{padding:3.5rem 0;} }
 
-.section-light{background:rgba(var(whitesmoke),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
-.section-alt{background:rgba(var(whitesmoke),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
+.section-light{background:rgba(var(--paper-rgb),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
+.section-alt{background:rgba(var(--paper-rgb),0.85); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
 .section-dark{background:rgba(var(--teal-rgb),0.82); color:var(--paper); position:relative; overflow:hidden; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);}
 .section-dark h1,.section-dark h2,.section-dark h3{color:var(--white);}
 .section-dark p{color:rgba(255,255,255,0.88);}
@@ -579,7 +579,7 @@ section{padding:5.5rem 0;}
 /* Testimonial */
 .testimonial{
   border-left:4px solid var(--teal);
-  background:#FAF7F2;
+  background:var(--white);
   border-radius:0 16px 16px 0;
   padding:1.8rem 2rem;
   margin:1.6rem 0;
@@ -1163,3 +1163,193 @@ html.skip-splash .splash-screen{display:none;}
 /* Stylish "corner bracket" photo frame - like a viewfinder - used on
    the TM1 and Power BI screenshots in "Platforms in Depth". */
 .corner-frame img{display:block; width:100%; border-radius:20px;}
+
+/* =========================================================================
+   CONTACT SECTION - frosted form card
+   ========================================================================= */
+.contact-section{position:relative; overflow:hidden;}
+
+/* Left column drops down a touch so its heading lines up with the one inside the card */
+.contact-section .contact-grid > div:first-child{padding-top:2.2rem;}
+
+.contact-card{
+  background:rgba(255,255,255,0.10);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.55);
+  border-radius:22px;
+  padding:2.2rem 2.4rem 2.4rem;
+  box-shadow:0 18px 44px rgba(2,5,9,0.08);
+}
+
+/* See-through form: the card and the text boxes are almost fully transparent so the
+   photo shows through. The soft white glow behind the labels keeps them readable.
+   If any text ever feels hard to read, raise the 0.10 / 0.22 numbers a little. */
+.contact-card label,
+.contact-card .eyebrow{text-shadow:0 0 10px rgba(255,255,255,0.9), 0 0 3px rgba(255,255,255,0.8);}
+.contact-card .eyebrow{color:var(--ink);}
+.contact-card .contact-form input,
+.contact-card .contact-form textarea{
+  background:rgba(255,255,255,0.22);
+  border:1.5px solid rgba(255,255,255,0.8);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+.contact-card .contact-form input:hover,
+.contact-card .contact-form textarea:hover{background:rgba(255,255,255,0.34);}
+.contact-card .contact-form input:focus,
+.contact-card .contact-form textarea:focus{
+  background:rgba(255,255,255,0.55);
+  border-color:var(--teal);
+}
+/* Stop the browser's autofill from painting the boxes solid blue/yellow */
+.contact-card .contact-form input:-webkit-autofill,
+.contact-card .contact-form textarea:-webkit-autofill{
+  -webkit-box-shadow:0 0 0 1000px rgba(255,255,255,0.35) inset;
+  -webkit-text-fill-color:var(--ink);
+  transition:background-color 9999s ease-out 0s;
+}
+
+@media(max-width:860px){
+  .contact-section .contact-grid > div:first-child{padding-top:0;}
+  .contact-card{padding:1.6rem 1.4rem 1.8rem;}
+}
+
+/* =========================================================================
+   OUR VALUES - PICTURE CARDS + CLICK-TO-OPEN PANES
+   Each of the five values is a card with a picture; clicking it opens a
+   detail pane (same pop-up system as the Services page). The ODS logo sits
+   behind both the cards and the panes as a soft watermark - to make it
+   stronger/fainter, change the "opacity" numbers marked below.
+   ========================================================================= */
+.values-row.values-row-media{grid-template-columns:repeat(5,1fr); gap:1.2rem;}
+
+.value-card{
+  position:relative;
+  isolation:isolate;          /* keeps the watermark behind the text but above the card's white */
+  overflow:hidden;
+  cursor:pointer;
+  display:flex; flex-direction:column;
+}
+.value-card:focus-visible{outline:2px solid var(--teal); outline-offset:3px;}
+
+/* THE ODS LOGO AS THE PANE BACKGROUND (only shows once a pane pops up - the cards stay clean) */
+.modal-values .modal-body::before{
+  content:"";
+  position:absolute; z-index:-1; pointer-events:none;
+  background:url('Assets/logo-whitebg-nav.png') center / contain no-repeat;
+}
+
+.value-thumb{
+  width:100%; max-width:168px;
+  aspect-ratio:3 / 2;
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:1.15rem;
+  box-shadow:0 6px 16px rgba(2,5,9,0.14);
+}
+.value-thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease;}
+.value-card:hover .value-thumb img{transform:scale(1.07);}
+.value-card h3{font-size:1.2rem;}
+.value-more{
+  margin-top:auto; padding-top:1.1rem;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  font-size:0.85rem; font-weight:700; color:var(--teal-dark);
+}
+.value-more svg{width:14px; height:14px; transition:transform .2s ease;}
+.value-card:hover .value-more svg{transform:translateX(4px);}
+
+/* Medium screens: 3 cards on top, 2 wider cards underneath */
+@media(max-width:1180px){
+  .values-row.values-row-media{grid-template-columns:repeat(6,1fr);}
+  .values-row-media .value:nth-child(-n+3){grid-column:span 2;}
+  .values-row-media .value:nth-child(n+4){grid-column:span 3;}
+}
+/* Phones: one per row */
+@media(max-width:640px){
+  .values-row.values-row-media{grid-template-columns:1fr;}
+  .values-row-media .value:nth-child(n){grid-column:auto;}
+}
+
+/* --- the detail panes --- */
+.modal-pane.modal-values{display:block; width:min(92vw, 780px); max-height:92vh;}
+.modal-values .modal-body{
+  position:relative; isolation:isolate; overflow:hidden;
+  padding:2.6rem 2.8rem 2.8rem;
+}
+.modal-values .modal-body::before{top:0; right:0; bottom:0; left:0; margin:auto; width:68%; height:54%; opacity:0.10;}  /* centred in the pane; opacity = watermark strength */
+.modal-values-head{display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem; padding-right:2.2rem;}
+.modal-values-head img{
+  width:158px; height:105px; object-fit:cover; flex-shrink:0;
+  border-radius:14px; box-shadow:0 8px 20px rgba(2,5,9,0.16);
+}
+.modal-values-head h2{margin:0 0 0.3rem; font-size:clamp(1.8rem, 3vw, 2.3rem);}
+.modal-values-head .modal-values-tag{margin:0; color:var(--slate); font-size:0.98rem;}
+.modal-values .modal-sub{font-size:1rem; margin:1.1rem 0 0.5rem;}
+.modal-values .btn{margin-top:0.4rem;}
+/* a little more compact, so the pane fits on laptop-height windows without scrolling */
+.modal-values .modal-body{padding-top:2.1rem; padding-bottom:2.2rem;}
+.modal-values-head{margin-bottom:1.1rem;}
+.modal-values .modal-body > p{line-height:1.6; margin-bottom:0.85em;}
+.modal-values .feature-list{margin-bottom:0.9rem;}
+.modal-values .feature-list li{margin-bottom:0.4rem;}
+@media(max-width:560px){
+  .modal-values .modal-body{padding:2rem 1.5rem 2.2rem;}
+  .modal-values-head{flex-direction:column; align-items:flex-start; gap:1rem;}
+  .modal-values-head img{width:132px; height:88px;}
+}
+
+/* Hover-to-open panes (Our Values): the dim layer is see-through to the mouse, so you can
+   keep hovering the other cards, and it's lighter so it doesn't feel heavy for a hover. */
+.modal-overlay.is-hover{
+  pointer-events:none;
+  background:rgba(2,5,9,0.30);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+
+/* A pane that is closing (still fading out) no longer catches the mouse, so it can't get in
+   the way of the next card you move onto. Only a fully open pane is clickable/hoverable. */
+.modal-pane{pointer-events:none;}
+.modal-pane.open{pointer-events:auto;}
+
+/* Our Values > Our Mission photo: rounded corners (from .corner-frame) + a wide banner crop */
+.mission-photo img{aspect-ratio:21 / 9; object-fit:cover; object-position:center 70%;}
+@media(max-width:640px){ .mission-photo img{aspect-ratio:4 / 3; object-position:center;} }
+
+/* =========================================================================
+   SITE BACKGROUND PHOTO
+   A photo fixed behind the whole website. The plain-colour sections (off-white,
+   teal, black) are slightly see-through, so the picture shows softly through them.
+   - To REMOVE it: delete this whole block.
+   - To try a DIFFERENT picture: change the file name inside url(...) below.
+   - "center bottom" keeps the bottom of the photo (the buildings) in view; use
+     "center center" if you'd rather crop equally from the top and bottom.
+   - It is a fixed layer (not "background-attachment: fixed") so it also behaves
+     properly on phones and iPads, where that older trick zooms the photo way in.
+   ========================================================================= */
+body::before{
+  content:"";
+  position:fixed;
+  top:0; right:0; bottom:0; left:0;
+  z-index:-1;
+  background:url('Assets/Skyscrapers.jpg') center bottom / cover no-repeat;
+  pointer-events:none;
+}
+
+/* ---- HOW VISIBLE IS THE PICTURE?  (the two numbers to play with) ------------------
+   --bg-veil : how solid the light sections are. 1 = fully solid (picture hidden),
+               0.85 = faint ghost of the picture, 0.72 = clearly visible, 0.6 = strong.
+   --bg-blur : how frosted the picture looks through the sections. 0px = sharp.
+   Lower numbers show more of the picture but make the small grey text a little harder
+   to read where the dark towers sit behind it - so change them in small steps.
+   Deleting this block puts the sections back to how they were.                      */
+:root{
+  --bg-veil:0.72;
+  --bg-blur:4px;
+}
+.section-light,
+.section-alt{
+  background:rgba(var(--paper-rgb), var(--bg-veil));
+  backdrop-filter:blur(var(--bg-blur));
+  -webkit-backdrop-filter:blur(var(--bg-blur));
+}
