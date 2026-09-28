@@ -156,27 +156,177 @@
   <div class="container">
     <span class="eyebrow">Our Values</span>
     <h2>The five things we won't compromise on.</h2>
-    <div class="values-row">
-      <div class="value"><h3>Clarity</h3><p>We simplify complexity so users can focus on what matters.</p></div>
-      <div class="value"><h3>Creativity</h3><p>We think outside the box to deliver solutions that put your business ahead of the curve.</p></div>
-      <div class="value"><h3>Partnership</h3><p>We walk with your team, not ahead of or above them.</p></div>
-      <div class="value"><h3>Empathy</h3><p>We take the time to understand your pain points.</p></div>
-      <div class="value"><h3>Authenticity</h3><p>We deliver and we explain &mdash; no jargon, no shortcuts.</p></div>
+    <div class="values-row values-row-media">
+      <div class="value value-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="clarity">
+        <div class="value-thumb"><img src="Assets/ValueClarity.jpg" alt="A magnifying glass bringing one figure into focus"></div>
+        <h3>Clarity</h3>
+        <p>We simplify complexity so users can focus on what matters.</p>
+        <span class="value-more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </div>
+      <div class="value value-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="creativity">
+        <div class="value-thumb"><img src="Assets/ValueCreativity.jpg" alt="One glowing light bulb standing out among many"></div>
+        <h3>Creativity</h3>
+        <p>We think outside the box to deliver solutions that put your business ahead of the curve.</p>
+        <span class="value-more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </div>
+      <div class="value value-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="partnership">
+        <div class="value-thumb"><img src="Assets/ValuePartnership.jpg" alt="Two hands joining puzzle pieces together against a sunset"></div>
+        <h3>Partnership</h3>
+        <p>We walk with your team, not ahead of or above them.</p>
+        <span class="value-more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </div>
+      <div class="value value-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="empathy">
+        <div class="value-thumb"><img src="Assets/ValueEmpathy.jpg" alt="Two pairs of hands forming a heart shape against the sky"></div>
+        <h3>Empathy</h3>
+        <p>We take the time to understand your pain points.</p>
+        <span class="value-more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </div>
+      <div class="value value-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="authenticity">
+        <div class="value-thumb"><img src="Assets/ValueAuthenticity.jpg" alt="A fingerprint on a thumb, symbolising genuine, verifiable work"></div>
+        <h3>Authenticity</h3>
+        <p>We deliver and we explain &mdash; no jargon, no shortcuts.</p>
+        <span class="value-more">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- ===============  VALUE DETAIL PANES  ===============
+     Clicking one of the five value cards above opens the matching pane
+     (card's data-modal="clarity" -> pane id="modal-clarity"). Closes on the
+     X, clicking the dark backdrop, or pressing Escape. The logic is shared
+     with the Services page - see script.js, "CAPABILITY DETAIL PANES". The
+     ODS logo sits behind each pane as a soft watermark (see styles.css,
+     "OUR VALUES"). -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true"></div>
+
+<div class="modal-pane modal-values" id="modal-clarity" role="dialog" aria-modal="true" aria-labelledby="modal-clarity-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-body">
+    <div class="modal-values-head">
+      <img src="Assets/ValueClarity.jpg" alt="">
+      <div>
+        <span class="eyebrow">Our Values</span>
+        <h2 id="modal-clarity-title">Clarity</h2>
+        <p class="modal-values-tag">We simplify complexity so users can focus on what matters.</p>
+      </div>
+    </div>
+    <p>Finance tools can quickly become tangled &mdash; too many tabs, too many numbers, too many places to look. We strip that back. Every model, dashboard and report we build is designed around the question it needs to answer, so your team spends its time reading the story in the data instead of hunting for it.</p>
+    <p>Clarity also means plain language. We explain what we've built, and why, in terms your whole team can follow &mdash; not just the person who built it.</p>
+    <h3 class="modal-sub">What this looks like in practice</h3>
+    <ul class="feature-list">
+        <li>Reports and dashboards built around the decision they support</li>
+        <li>Clean, consistent model structures that are easy to maintain</li>
+        <li>Plain-language walkthroughs and documentation</li>
+        <li>Fewer, better metrics instead of everything at once</li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Talk to us</a>
+  </div>
+</div>
+
+<div class="modal-pane modal-values" id="modal-creativity" role="dialog" aria-modal="true" aria-labelledby="modal-creativity-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-body">
+    <div class="modal-values-head">
+      <img src="Assets/ValueCreativity.jpg" alt="">
+      <div>
+        <span class="eyebrow">Our Values</span>
+        <h2 id="modal-creativity-title">Creativity</h2>
+        <p class="modal-values-tag">We think outside the box to deliver solutions that put your business ahead of the curve.</p>
+      </div>
+    </div>
+    <p>No two finance teams work the same way, so we don't force the same solution on every client. We look at each problem from more than one angle &mdash; sometimes that means a smarter model design, sometimes automation, sometimes rethinking the process before we touch the software.</p>
+    <p>The aim is always practical creativity: fresh ideas that genuinely save time or sharpen insight, not novelty for its own sake.</p>
+    <h3 class="modal-sub">What this looks like in practice</h3>
+    <ul class="feature-list">
+        <li>Custom-fit solutions rather than off-the-shelf templates</li>
+        <li>Automation with SQL, Python, RPA and AI agents where it truly helps</li>
+        <li>Exploring alternative approaches before committing to one</li>
+        <li>Getting the most out of each platform, not just the obvious features</li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Talk to us</a>
+  </div>
+</div>
+
+<div class="modal-pane modal-values" id="modal-partnership" role="dialog" aria-modal="true" aria-labelledby="modal-partnership-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-body">
+    <div class="modal-values-head">
+      <img src="Assets/ValuePartnership.jpg" alt="">
+      <div>
+        <span class="eyebrow">Our Values</span>
+        <h2 id="modal-partnership-title">Partnership</h2>
+        <p class="modal-values-tag">We walk with your team, not ahead of or above them.</p>
+      </div>
+    </div>
+    <p>We don't arrive, build something in isolation and disappear. Your team is involved from the first discovery session through to handover, so what we deliver reflects how you actually work &mdash; and the people using it feel ownership of the result.</p>
+    <p>We see ourselves as an extension of your finance team: alongside you, never ahead of or above you.</p>
+    <h3 class="modal-sub">What this looks like in practice</h3>
+    <ul class="feature-list">
+        <li>Key users involved at every stage, from discovery to go-live</li>
+        <li>Regular check-ins and honest progress updates</li>
+        <li>Knowledge shared openly so your team can run and extend what we build</li>
+        <li>Ongoing support once the project is complete</li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Talk to us</a>
+  </div>
+</div>
+
+<div class="modal-pane modal-values" id="modal-empathy" role="dialog" aria-modal="true" aria-labelledby="modal-empathy-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-body">
+    <div class="modal-values-head">
+      <img src="Assets/ValueEmpathy.jpg" alt="">
+      <div>
+        <span class="eyebrow">Our Values</span>
+        <h2 id="modal-empathy-title">Empathy</h2>
+        <p class="modal-values-tag">We take the time to understand your pain points.</p>
+      </div>
+    </div>
+    <p>Behind every report is a person under pressure &mdash; a month-end deadline, a board pack, a manual process that eats the weekend. Before we recommend anything, we take the time to understand those pain points properly.</p>
+    <p>That starts with listening: discovery sessions and diagnostics with the people who actually use the tools, so we solve the problems that matter to them, not just the ones on the brief.</p>
+    <h3 class="modal-sub">What this looks like in practice</h3>
+    <ul class="feature-list">
+        <li>Discovery sessions and diagnostics before any build begins</li>
+        <li>Solutions shaped around real workflows and deadlines</li>
+        <li>Training paced to your team, not to our project plan</li>
+        <li>Patience with questions &mdash; there are no silly ones</li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Talk to us</a>
+  </div>
+</div>
+
+<div class="modal-pane modal-values" id="modal-authenticity" role="dialog" aria-modal="true" aria-labelledby="modal-authenticity-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-body">
+    <div class="modal-values-head">
+      <img src="Assets/ValueAuthenticity.jpg" alt="">
+      <div>
+        <span class="eyebrow">Our Values</span>
+        <h2 id="modal-authenticity-title">Authenticity</h2>
+        <p class="modal-values-tag">We deliver and we explain &mdash; no jargon, no shortcuts.</p>
+      </div>
+    </div>
+    <p>We deliver what we say we'll deliver, and we explain what we've done. That means honest advice about what will and won't work, realistic timelines, and no hiding behind technical jargon or shortcuts that create problems down the line.</p>
+    <p>If something isn't the right fit for you, we'll tell you plainly.</p>
+    <h3 class="modal-sub">What this looks like in practice</h3>
+    <ul class="feature-list">
+        <li>Clear, jargon-free explanations at every step</li>
+        <li>Honest advice on trade-offs, timelines and effort</li>
+        <li>No black boxes &mdash; what we build is documented and explained</li>
+        <li>Work done properly, with no shortcuts that come back later</li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Talk to us</a>
+  </div>
+</div>
 
 <section class="section-alt">
   <div class="container">
     <span class="eyebrow">Our Mission</span>
     <h2>To make data tools feel human &mdash; not hard.</h2>
     <p style="max-width:70ch; font-size:1.1rem; color:var(--slate);">That means accurate forecasting, streamlined reporting, and actionable insight your team can actually use day to day &mdash; not another system to fight with.</p>
-    <!-- PHOTO PLACEHOLDER: replace with a real image when available -->
-    <div class="image-placeholder" style="min-height:260px; margin-top:2rem;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>
-      <strong>Team culture photo</strong>
-      <span>A candid, informal photo that shows the team's personality &mdash; brainstorming, laughing, at a team event, etc.</span>
-      <span class="dims">Landscape &middot; 1200&times;700px</span>
+    <div class="corner-frame mission-photo" style="margin-top:2rem;">
+      <img src="Assets/OurMission.jpg" alt="A bright, modern open-plan office with people working at long white desks">
     </div>
   </div>
 </section>
@@ -223,6 +373,11 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 ODS Consulting. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="7.5" cy="7" r="0.9" fill="currentColor" stroke="none"/><line x1="7.5" y1="10.2" x2="7.5" y2="16.5"/><line x1="11.7" y1="10.2" x2="11.7" y2="16.5"/><path d="M11.7 13a2 2 0 0 1 4 0v3.5"/></svg></a>
+        <a href="#" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M13.6 21v-6.8h2.1l.3-2.5h-2.4V9.9c0-.7.2-1.2 1.2-1.2h1.3V6.4c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.2-3.2 3.3v1.9H8.8v2.5h2.2V21"/></svg></a>
+      </div>
     </div>
   </div>
 </footer>
