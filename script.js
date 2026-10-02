@@ -254,13 +254,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ------------------------------------------------------------
   // 4) CONTACT FORM (contact.html only)
-  // IMPORTANT: this form does NOT actually send an email or
-  // message anywhere yet. This just prevents the page from
-  // reloading, shows a fake "Message received" confirmation on
-  // the button for 2.5 seconds, then resets the form fields.
-  // To make this real, connect the form to a service like
-  // Formspree (or your own backend/CRM) - see the note in
-  // contact.html for where that would go.
+  // Submits to Formspree (see the big comment above the <form> tag
+  // in contact.html for the one-time setup needed) - Formspree takes
+  // the submission and forwards it to hello@odsconsulting.tech as a
+  // real email. The page itself never reloads: the submission happens
+  // quietly in the background (fetch), and the button/status text
+  // just reports whether it worked.
   //
   // The Subject field auto-fills when arriving via a link like
   // contact.html?subject=Enquiry%20for%20Power%20BI - this is how
@@ -275,17 +274,92 @@ document.addEventListener('DOMContentLoaded', function () {
       if (subjectFromUrl) subjectField.value = subjectFromUrl;
     }
 
+    var statusEl = document.getElementById('formStatus');
+
+    function setStatus(message, kind) {
+      if (!statusEl) return;
+      statusEl.textContent = message;
+      statusEl.className = 'form-status' + (kind ? ' form-status-' + kind : '');
+    }
+
+    // ------------------------------------------------------------
+    // Email validation: checks the typed value actually looks like
+    // an email address (something@something.something), not just
+    // relying on the browser's own built-in popup, which looks
+    // different in every browser and some people miss entirely.
+    // Shows/hides a specific message right under the field instead.
+    // ------------------------------------------------------------
+    var emailField = document.getElementById('email');
+    var emailError = document.getElementById('emailError');
+    var emailTouched = false; // only nag once they've left the field once, not while first typing
+
+    function emailLooksValid() {
+      // deliberately simple: "something@something.something", no spaces
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value.trim());
+    }
+
+    function validateEmail() {
+      var ok = emailField.value.trim() === '' ? !emailField.required : emailLooksValid();
+      emailField.classList.toggle('is-invalid', !ok);
+      if (emailError) {
+        if (ok) {
+          emailError.textContent = '';
+          emailError.classList.remove('visible');
+        } else {
+          emailError.textContent = emailField.value.trim() === ''
+            ? 'Please enter your email address.'
+            : 'That doesn\u2019t look like a valid email address - please check it (e.g. name@example.com).';
+          emailError.classList.add('visible');
+        }
+      }
+      return ok;
+    }
+
+    if (emailField) {
+      emailField.addEventListener('blur', function () { emailTouched = true; validateEmail(); });
+      emailField.addEventListener('input', function () { if (emailTouched) validateEmail(); });
+    }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault(); // stop the default page-reload behaviour
-      var btn = form.querySelector('button');
-      var original = btn.textContent;
-      btn.textContent = 'Message received';
+
+      // Block the actual send if the email address doesn't check out.
+      if (emailField) {
+        emailTouched = true;
+        if (!validateEmail()) {
+          emailField.focus();
+          return;
+        }
+      }
+
+      var btn = form.querySelector('.btn-send');
+      var originalHTML = btn.innerHTML;
       btn.disabled = true;
-      setTimeout(function () {
-        btn.textContent = original;
-        btn.disabled = false;
-        form.reset();
-      }, 2500);
+      btn.textContent = 'Sending...';
+      setStatus('', '');
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(function (response) {
+          if (response.ok) {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+            setStatus('Thanks - your message has been sent. We\u2019ll be in touch shortly.', 'success');
+            form.reset();
+          } else {
+            return response.json().then(function (data) {
+              throw new Error((data && data.errors) ? data.errors.map(function (x) { return x.message; }).join(', ') : 'Submission failed');
+            });
+          }
+        })
+        .catch(function () {
+          btn.innerHTML = originalHTML;
+          btn.disabled = false;
+          setStatus('Something went wrong sending that - please try again, or email us directly at hello@odsconsulting.tech.', 'error');
+        });
     });
   }
 
@@ -430,31 +504,52 @@ document.addEventListener('DOMContentLoaded', function () {
   // 9) POP-UP PANES THAT OPEN ON HOVER
   // Used by the Services "What We Deliver" cards and the Our Values
   // cards. Each card has data-modal="tm1" (or "clarity" etc) that
-  // matches a pane with id="modal-tm1". On a computer with a mouse:
+  // matches a pane with id="modal-tm1".
+  //
+  // With a MOUSE (or trackpad / pen):
   //   - resting the pointer on a card for a moment opens its pane
   //     (the tiny delay stops panes flashing open as you sweep past)
   //   - it stays open while the pointer is on the card OR the pane,
   //     and closes a moment after the pointer leaves both
   //   - moving onto another card that's still visible switches panes
-  //   - the page is NOT locked and the dim layer lets the mouse through,
-  //     so nothing jumps around
-  // On phones/tablets (no hover) a tap opens the pane like a normal
-  // pop-up: the backdrop blocks the page, tap it (or the X) to close.
+  //   - the page is NOT locked and the dim layer lets the mouse through
+  // With a FINGER (phones, tablets, touch screens): a tap opens the pane
+  //   like a normal pop-up - the backdrop blocks the page; tap it (or the
+  //   X) to close.
   // Keyboard: Tab to a card, Enter/Space opens it, Escape closes it.
+  //
+  // NOTE: this deliberately reacts to the pointer that is ACTUALLY being
+  // used, instead of asking the browser "does this device have hover?".
+  // Touch-screen laptops (and some browsers) answer that question wrongly,
+  // which used to switch hover off even though a mouse was in use.
   // ------------------------------------------------------------
   var hoverCards = document.querySelectorAll('.value-card[data-modal], .capability-card[data-modal]');
   var hoverOverlay = document.getElementById('modalOverlay');
   if (hoverCards.length && hoverOverlay) {
-    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var HAS_POINTER_EVENTS = !!window.PointerEvent;
     var vOpenCard = null, vOpenPane = null, vPinned = false, vScrollAt = 0;
+    var vMode = 'hover';                       // 'hover' (mouse) or 'modal' (finger)
+    var vLocked = false;                       // did WE lock the page scroll?
     var vOpenTimer, vCloseTimer;
-    var vMouseX = -1, vMouseY = -1, vSuppressCard = null;
+    var vMouseX = -1, vMouseY = -1, vSuppressCard = null, vLastPointer = 'mouse';
 
-    if (canHover) hoverOverlay.classList.add('is-hover');
+    // true for a real mouse / trackpad / pen, false for a finger
+    function isMouseLike(e) {
+      return !HAS_POINTER_EVENTS || e.pointerType === 'mouse' || e.pointerType === 'pen';
+    }
 
-    // Remember where the mouse is, so that when the visitor dismisses a pane (X / Escape) we can tell
-    // which card is sitting under the pointer and NOT instantly re-open it.
-    document.addEventListener('mousemove', function (e) { vMouseX = e.clientX; vMouseY = e.clientY; }, { passive: true });
+    // Remember the last kind of pointer used, and where the mouse is, so that when the
+    // visitor dismisses a pane (X / Escape) we can tell which card is under the pointer
+    // and NOT instantly re-open it.
+    if (HAS_POINTER_EVENTS) {
+      document.addEventListener('pointermove', function (e) {
+        vLastPointer = e.pointerType;
+        if (isMouseLike(e)) { vMouseX = e.clientX; vMouseY = e.clientY; }
+      }, { passive: true });
+      document.addEventListener('pointerdown', function (e) { vLastPointer = e.pointerType; }, { passive: true, capture: true });
+    } else {
+      document.addEventListener('mousemove', function (e) { vMouseX = e.clientX; vMouseY = e.clientY; }, { passive: true });
+    }
 
     function vCardUnderPointer() {
       if (vMouseX < 0) return null;
@@ -472,66 +567,75 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!vOpenPane) return;
       vOpenPane.classList.remove('open');
       hoverOverlay.classList.remove('open');
-      if (!canHover) document.body.style.overflow = '';
+      if (vLocked) { document.body.style.overflow = ''; vLocked = false; }
       vOpenPane = null; vOpenCard = null; vPinned = false;
     }
 
     function vCloseByVisitor() {
-      vSuppressCard = canHover ? vCardUnderPointer() : null;
+      vSuppressCard = (vLastPointer !== 'touch') ? vCardUnderPointer() : null;
       vClose();
     }
 
-    function vOpen(card, pin) {
+    function vOpen(card, pin, viaTouch) {
       var pane = document.getElementById('modal-' + card.getAttribute('data-modal'));
       if (!pane) return;
       clearTimeout(vCloseTimer);
       if (vOpenPane && vOpenPane !== pane) vOpenPane.classList.remove('open');
+      vMode = viaTouch ? 'modal' : 'hover';
+      hoverOverlay.classList.toggle('is-hover', vMode === 'hover');   // see-through to the mouse only for mouse users
       pane.classList.add('open');
       hoverOverlay.classList.add('open');
-      if (!canHover) document.body.style.overflow = 'hidden';
+      if (vMode === 'modal' && !vLocked) { document.body.style.overflow = 'hidden'; vLocked = true; }
+      if (vMode === 'hover' && vLocked) { document.body.style.overflow = ''; vLocked = false; }
       vOpenPane = pane; vOpenCard = card; vPinned = !!pin;
       vScrollAt = window.pageYOffset;
     }
 
     function vScheduleClose() {
       clearTimeout(vCloseTimer);
-      if (vPinned) return;              // opened with the keyboard: stays until Escape / X
+      if (vPinned || vMode !== 'hover') return;     // keyboard-opened / finger-opened: stays until Escape / X / tap outside
       vCloseTimer = setTimeout(vClose, 220);
     }
 
+    var enterEvent = HAS_POINTER_EVENTS ? 'pointerenter' : 'mouseenter';
+    var leaveEvent = HAS_POINTER_EVENTS ? 'pointerleave' : 'mouseleave';
+
     hoverCards.forEach(function (card) {
-      if (canHover) {
-        card.addEventListener('mouseenter', function () {
-          if (card === vSuppressCard) return;          // just dismissed while over this card
-          clearTimeout(vCloseTimer);
-          if (vOpenCard === card) return;
-          clearTimeout(vOpenTimer);
-          // brief pause before opening; switch instantly if another pane is already open
-          vOpenTimer = setTimeout(function () { vOpen(card, false); }, vOpenPane ? 0 : 140);
-        });
-        card.addEventListener('mouseleave', function () {
-          if (card === vSuppressCard) vSuppressCard = null;
-          clearTimeout(vOpenTimer);
-          vScheduleClose();
-        });
-      }
-      card.addEventListener('click', function () { vOpen(card, false); });
+      card.addEventListener(enterEvent, function (e) {
+        if (!isMouseLike(e)) return;                  // a finger touching the card is handled by "click" below
+        if (card === vSuppressCard) return;           // just dismissed while over this card
+        clearTimeout(vCloseTimer);
+        if (vOpenCard === card) return;
+        clearTimeout(vOpenTimer);
+        // brief pause before opening; switch instantly if another pane is already open
+        vOpenTimer = setTimeout(function () { vOpen(card, false, false); }, vOpenPane ? 0 : 140);
+      });
+      card.addEventListener(leaveEvent, function (e) {
+        if (!isMouseLike(e)) return;
+        if (card === vSuppressCard) vSuppressCard = null;
+        clearTimeout(vOpenTimer);
+        vScheduleClose();
+      });
+      card.addEventListener('click', function (e) {
+        var t = (e.pointerType !== undefined && e.pointerType !== '') ? e.pointerType : vLastPointer;
+        vOpen(card, false, t === 'touch');
+      });
       card.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          vOpen(card, true);
+          vOpen(card, true, false);
         }
       });
     });
 
     document.querySelectorAll('.modal-pane').forEach(function (pane) {
-      pane.addEventListener('mouseenter', function () { clearTimeout(vCloseTimer); });
-      pane.addEventListener('mouseleave', function () { if (canHover) vScheduleClose(); });
+      pane.addEventListener(enterEvent, function (e) { if (isMouseLike(e)) clearTimeout(vCloseTimer); });
+      pane.addEventListener(leaveEvent, function (e) { if (isMouseLike(e)) vScheduleClose(); });
     });
     document.querySelectorAll('.modal-pane .modal-close').forEach(function (btn) {
       btn.addEventListener('click', vCloseByVisitor);
     });
-    hoverOverlay.addEventListener('click', vClose);           // phones/tablets: tap the backdrop
+    hoverOverlay.addEventListener('click', vClose);           // finger: tap the dark backdrop
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') vCloseByVisitor();
     });
@@ -541,8 +645,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (e.target.closest && e.target.closest('.value-card, .capability-card')) return;
       vClose();
     });
-    window.addEventListener('scroll', function () {           // scrolling the page away closes it
-      if (canHover && vOpenPane && Math.abs(window.pageYOffset - vScrollAt) > 40) vClose();
+    window.addEventListener('scroll', function () {           // scrolling the page away closes a mouse-opened pane
+      if (vMode === 'hover' && vOpenPane && Math.abs(window.pageYOffset - vScrollAt) > 40) vClose();
     }, { passive: true });
   }
 });
