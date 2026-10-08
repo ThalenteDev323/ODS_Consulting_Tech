@@ -14,7 +14,8 @@
   --teal-dark:#018382;
   --teal-rgb:1,164,163;
   --olanji:orange;
-  --slate:#5B6670;
+  --slate:#555658;
+  --text:#555658;  /* Brand Dark Grey - body copy */
   --line:rgba(16,24,32,0.14);
   --line-light:rgba(246,245,241,0.22);
   --white:#FFFFFF;
@@ -23,11 +24,13 @@
 }
 
 *{box-sizing:border-box;}
+/* Fluid root size: 16px on phones/laptops, growing smoothly to ~24px on
+   very large screens. Everything sized in rem scales with it. */
 html{scroll-behavior:smooth;}
 body{
   margin:0;
   background:var(--paper);
-  color:var(--ink);
+  color:var(--text);
   font-family:'Roboto','Trebuchet MS',Calibri,Arial,Helvetica,sans-serif;
   font-size:16px;
   line-height:1.7;
@@ -141,10 +144,11 @@ section{padding:5.5rem 0;}
 }
 
 .eyebrow{
-  font-size:0.85rem;
+  font-size:clamp(1.2rem, 1.7vw, 1.55rem);  /* section label size - raise/lower here */
+  line-height:1.3;
   color:var(--teal-dark);
   font-weight:700;
-  margin-bottom:0.9rem;
+  margin-bottom:0.7rem;
   display:block;
 }
 .section-dark .eyebrow{color:var(--white);}
@@ -748,7 +752,7 @@ form.contact-form{display:flex; flex-direction:column; gap:1.3rem;}
 /* Shown only when script.js decides what's typed isn't a valid email address */
 .field-error{
   display:none;
-  font-size:0.85rem;
+  font-size:0.95rem;
   font-weight:600;
   color:#B3261E;
   margin:0.5rem 0 0;
@@ -785,7 +789,7 @@ form.contact-form{display:flex; flex-direction:column; gap:1.3rem;}
 
 .contact-form button{align-self:flex-start;}
 .form-note{font-size:0.85rem; color:var(--slate); margin-top:0.8rem;}
-.form-status{font-size:0.9rem; font-weight:600; margin-top:0.9rem; min-height:1.3em;}
+.form-status{font-size:0.95rem; font-weight:600; margin-top:0.9rem; min-height:1.3em;}
 .form-status-success{color:var(--teal-dark);}
 .form-status-error{color:#B3261E;}
 
@@ -840,10 +844,10 @@ footer{
   position:absolute; inset:0;
   display:flex; align-items:center;
   opacity:0; visibility:hidden;
-  transition:opacity 1s ease;
+  transition:opacity 1s ease, visibility 0s linear 1s;   /* stay visible while fading out, then hide */
   z-index:1;
 }
-.slide.active{opacity:1; visibility:visible; position:relative; z-index:2;}
+.slide.active{opacity:1; visibility:visible; position:relative; z-index:2; transition:opacity 1s ease, visibility 0s;}
 .slide-visual{
   position:absolute; inset:0;
   z-index:0;
@@ -967,6 +971,22 @@ footer{
   font-size:1.8rem; color:var(--teal-dark); font-weight:700;
 }
 .intro-stats span{font-size:0.85rem; color:var(--slate);}
+
+/* "At a glance" key-fact cards (home page) */
+.glance{margin-top:3rem;}
+.glance-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1.4rem; margin-top:0.8rem;}
+.glance-card{
+  background:rgba(var(--teal-rgb),0.10); border-radius:20px; padding:1.6rem 1.7rem;
+}
+.glance-card:nth-child(even){background:rgba(var(--white-rgb),0.72);}
+.glance-card strong{display:block; font-size:1.8rem; line-height:1.2; color:var(--teal-dark); font-weight:700;}
+.glance-card em{
+  display:block; font-style:normal; font-size:0.78rem; font-weight:700;
+  letter-spacing:0.08em; text-transform:uppercase; color:var(--slate); margin:0.5rem 0 0.7rem;
+}
+.glance-card p{margin:0; font-size:0.92rem; line-height:1.5; color:var(--slate);}
+@media(max-width:1000px){ .glance-grid{grid-template-columns:1fr 1fr;} }
+@media(max-width:560px){ .glance-grid{grid-template-columns:1fr;} }
 
 /* Page header (for inner pages) */
 .page-header{
@@ -1288,7 +1308,7 @@ html.skip-splash .splash-screen{display:none;}
 .value-more{
   margin-top:auto; padding-top:1.1rem;
   display:inline-flex; align-items:center; gap:0.4rem;
-  font-size:0.85rem; font-weight:700; color:var(--teal-dark);
+  font-size:0.95rem; font-weight:700; color:var(--teal-dark);
 }
 .value-more svg{width:14px; height:14px; transition:transform .2s ease;}
 .value-card:hover .value-more svg{transform:translateX(4px);}
@@ -1387,3 +1407,274 @@ body::before{
   backdrop-filter:blur(var(--bg-blur));
   -webkit-backdrop-filter:blur(var(--bg-blur));
 }
+
+/* "At a glance" cards: interactive + their equal-size detail panes */
+.glance-card{cursor:pointer; transition:transform .2s ease, box-shadow .2s ease;}
+.glance-card:hover, .glance-card:focus-visible{transform:translateY(-4px); box-shadow:0 10px 26px rgba(2,5,9,0.12);}
+.glance-card:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.modal-pane.modal-glance{width:min(92vw, 900px); height:min(86vh, 460px); overflow:hidden;}
+.modal-glance .modal-media{height:100%; overflow:hidden;}
+.modal-glance .modal-media img{height:100%; min-height:0;}
+.modal-glance .modal-body{display:flex; flex-direction:column; justify-content:center; padding:2rem 2.4rem; overflow-y:auto;}
+.modal-glance .modal-body h2{font-size:clamp(1.4rem, 2.4vw, 1.8rem);}
+.modal-glance .modal-body p{margin-bottom:0.8em;}
+.modal-glance .feature-list{margin-bottom:1rem;}
+.modal-glance .btn{align-self:flex-start;}
+/* the teal "What we deliver" card shown as the End-to-end pane's picture */
+.deliver-card{
+  height:100%; min-height:280px; box-sizing:border-box;
+  background:var(--teal); color:var(--white);
+  padding:2.2rem 2rem; display:flex; flex-direction:column; justify-content:center;
+}
+.deliver-card .deliver-eyebrow{font-size:0.9rem; font-weight:700; margin-bottom:1.2rem;}
+.deliver-card h3{color:var(--white); font-size:clamp(1.4rem,2.2vw,1.8rem); line-height:1.25; margin:0 0 1.4rem;}
+.deliver-card .deliver-rule{display:block; width:110px; height:3px; background:orange; margin-bottom:1.4rem;}
+.deliver-card p{color:var(--white); margin:0; font-size:1rem;}
+@media(max-width:820px){
+  .modal-pane.modal-glance{height:min(88vh, 640px); overflow-y:auto;}
+  .modal-glance .modal-media{height:200px;}
+  .deliver-card{min-height:200px; padding:1.4rem;}
+  .modal-glance .modal-body{display:block; overflow:visible; padding:1.6rem;}
+}
+
+/* Easy-reading text blocks: bigger type, a bold lead line, short tick lists and a callout */
+.readable p{font-size:1.2rem; line-height:1.65; max-width:60ch;}
+.readable .lead{font-size:1.5rem; line-height:1.4; font-weight:500; color:var(--ink); margin-bottom:1rem;}
+.readable strong{color:var(--ink); font-weight:700;}
+.tick-list{list-style:none; margin:0.4rem 0 1.4rem; padding:0; max-width:60ch;}
+.tick-list li{
+  position:relative; padding:0.35rem 0 0.35rem 2rem; font-size:1.2rem; line-height:1.5;
+}
+.tick-list li::before{
+  content:""; position:absolute; left:0; top:0.62rem; width:1.15rem; height:1.15rem; border-radius:50%;
+  background:var(--teal) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 12.5 10.5 17 18 8'/></svg>") center/70% no-repeat;
+}
+.readable .callout{
+  border-left:4px solid var(--teal); padding:0.3rem 0 0.3rem 1.2rem; margin:1.4rem 0;
+  font-size:1.25rem; color:var(--ink); font-weight:500;
+}
+/* Home "What We Do" rows: bold headline sentence, supporting line underneath, bigger */
+.service-item p{font-size:1.15rem; line-height:1.55;}
+.service-item p strong{display:block; color:var(--ink); font-weight:700; font-size:1.25rem; margin-bottom:0.2rem;}
+.service-item p span{display:block;}
+
+/* Our Values panes: short lead line + four numbered "in practice" tiles (easy to scan) */
+.modal-values .values-lead{font-size:1.2rem; line-height:1.5; font-weight:500; color:var(--ink); margin:0.2rem 0 1rem; max-width:none;}
+.modal-values .modal-sub{font-size:0.8rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--teal-dark); margin:0 0 0.7rem;}
+.practice-grid{display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1.3rem;}
+.practice-tile{
+  display:flex; gap:0.8rem; align-items:flex-start;
+  background:rgba(var(--teal-rgb),0.09); border-radius:14px; padding:0.9rem 1rem;
+}
+.practice-tile:nth-child(2), .practice-tile:nth-child(3){background:rgba(2,5,9,0.045);}
+.practice-num{
+  flex:0 0 1.9rem; height:1.9rem; border-radius:50%; background:var(--teal); color:var(--white);
+  font-weight:700; font-size:0.95rem; display:flex; align-items:center; justify-content:center;
+}
+.practice-tile strong{display:block; color:var(--ink); font-size:1.05rem; line-height:1.3;}
+.practice-tile span:not(.practice-num){display:block; font-size:0.95rem; line-height:1.45; color:var(--slate); margin-top:0.15rem;}
+@media(max-width:560px){ .practice-grid{grid-template-columns:1fr;} }
+
+/* Services panes: each one has its own easy-scan layout */
+.p-lead{font-size:1.2rem; line-height:1.5; font-weight:500; color:var(--ink); margin:0 0 1rem;}
+.p-note{font-size:1rem; line-height:1.5; border-left:4px solid var(--teal); padding:0.2rem 0 0.2rem 1rem; margin:1.1rem 0 1.3rem; color:var(--ink);}
+.p-note b{color:var(--teal-dark);}
+/* 1. numbered steps with a connecting line */
+.p-steps{list-style:none; counter-reset:s; margin:0; padding:0;}
+.p-steps li{counter-increment:s; position:relative; padding:0 0 0.8rem 2.8rem;}
+.p-steps li::before{
+  content:counter(s); position:absolute; left:0; top:0; width:1.9rem; height:1.9rem; border-radius:50%;
+  background:var(--teal); color:var(--white); font-weight:700; font-size:0.9rem; display:flex; align-items:center; justify-content:center;
+}
+.p-steps li::after{content:""; position:absolute; left:0.93rem; top:2rem; bottom:0.1rem; width:2px; background:rgba(var(--teal-rgb),0.3);}
+.p-steps li:last-child::after{display:none;}
+.p-steps strong{display:block; color:var(--ink); line-height:1.3; padding-top:0.2rem;}
+.p-steps span{display:block; font-size:0.95rem; color:var(--slate); line-height:1.4;}
+/* 2. four feature cards */
+.p-cards{display:grid; grid-template-columns:1fr 1fr; gap:0.7rem;}
+.p-cards div{background:rgba(var(--teal-rgb),0.09); border-top:3px solid var(--teal); border-radius:12px; padding:0.9rem 1rem;}
+.p-cards strong{display:block; color:var(--ink); font-size:1.05rem;}
+.p-cards span{font-size:0.95rem; color:var(--slate);}
+/* 3. before / after */
+.p-compare{display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1rem;}
+.p-compare div{border-radius:14px; padding:1rem 1.1rem;}
+.p-compare em{display:block; font-style:normal; font-size:0.78rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:0.4rem;}
+.p-before{background:rgba(2,5,9,0.05);} .p-before em{color:var(--slate);}
+.p-after{background:var(--teal); color:var(--white);} .p-after em{color:var(--white);}
+.p-compare span{display:block; font-size:1rem; line-height:1.45;}
+/* pills (3 and 4) */
+.p-pills{display:flex; flex-wrap:wrap; gap:0.5rem;}
+.p-pills span{background:rgba(var(--teal-rgb),0.12); color:var(--teal-dark); font-weight:700; font-size:0.9rem; padding:0.4rem 0.9rem; border-radius:999px;}
+.p-pills-big span{font-size:1rem; padding:0.55rem 1.1rem;}
+/* 5. badges + ticks */
+.p-badges{display:grid; grid-template-columns:repeat(3,1fr); gap:0.7rem; margin-bottom:1rem;}
+.p-badges div{background:rgba(var(--teal-rgb),0.09); border-radius:14px; padding:0.9rem; text-align:center;}
+.p-badges b{display:block; font-size:1.3rem; color:var(--teal-dark);}
+.p-badges span{display:block; font-size:0.9rem; line-height:1.35; color:var(--slate); margin-top:0.2rem;}
+.p-ticks{list-style:none; margin:0 0 1.2rem; padding:0;}
+.p-ticks li{position:relative; padding:0.25rem 0 0.25rem 1.9rem; line-height:1.45;}
+.p-ticks li::before{
+  content:""; position:absolute; left:0; top:0.4rem; width:1.15rem; height:1.15rem; border-radius:50%;
+  background:var(--teal) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 12.5 10.5 17 18 8'/></svg>") center/70% no-repeat;
+}
+.modal-pane:not(.modal-values):not(.modal-glance) .modal-body{padding:2.2rem 2.4rem;}
+@media(max-width:560px){ .p-cards,.p-compare,.p-badges{grid-template-columns:1fr;} }
+.modal-pane:not(.modal-values):not(.modal-glance) .modal-body h2{font-size:clamp(1.6rem,2.3vw,2rem); margin-bottom:0.7rem;}
+.p-pills{margin-bottom:1.4rem;}
+.p-steps li{padding-bottom:0.55rem;}
+.p-steps li::after{top:1.95rem;}
+.p-note{margin:1rem 0 1.2rem;}
+
+/* Orange accent on every pop-up card: a thin orange top edge + a short orange rule under the heading */
+.modal-pane{border-top:5px solid var(--olanji);}
+.modal-body h2::after, .modal-values-head h2::after{
+  content:""; display:block; width:56px; height:3px; border-radius:2px;
+  background:var(--olanji); margin-top:0.55rem;
+}
+.modal-values-head h2::after{margin-bottom:0.3rem;}
+
+
+/* ---- HOW WE WORK: four white cards on the teal photo ---- */
+.process{gap:1.6rem; margin-top:4rem;}
+.process-track{top:0; left:12.5%; right:12.5%; background:rgba(255,255,255,0.35);}
+.process-step{
+  position:relative; background:rgba(255,255,255,0.95); border-radius:20px;
+  padding:2.6rem 1.6rem 1.8rem; box-shadow:0 14px 34px rgba(2,5,9,0.18);
+  border-bottom:4px solid var(--olanji); text-align:left;
+  opacity:0.82; transition:opacity .4s ease, transform .4s ease, box-shadow .4s ease;
+}
+.process-step.active{opacity:1; transform:translateY(-6px); box-shadow:0 20px 42px rgba(2,5,9,0.24);}
+.process-step .step-num{
+  position:absolute; top:-1.4rem; left:50%; margin:0; transform:translateX(-50%);
+  width:2.8rem; height:2.8rem; font-size:1rem;
+  background:var(--white); color:var(--teal-dark); border:3px solid var(--teal);
+}
+.process-step.active .step-num{background:var(--teal); color:var(--white); border-color:var(--white); transform:translateX(-50%) scale(1.12);}
+.step-icon{
+  width:3rem; height:3rem; border-radius:14px; background:rgba(var(--teal-rgb),0.12); color:var(--teal-dark);
+  display:flex; align-items:center; justify-content:center; margin-bottom:1rem;
+}
+.step-icon svg{width:1.5rem; height:1.5rem;}
+.process-step h3{color:var(--ink); font-size:1.6rem; margin-bottom:0.5rem;}
+.process-step p, .process-step.active p{opacity:1; color:var(--text);}
+.process-step .step-lead{font-size:1.1rem; font-weight:700; color:var(--teal-dark); line-height:1.35; margin-bottom:0.6rem;}
+.process-step .step-detail{font-size:1rem; line-height:1.55; margin:0; max-width:none;}
+@media(max-width:860px){ .process{grid-template-columns:1fr 1fr; gap:2.8rem 1.4rem;} .process-track{display:none;} }
+@media(max-width:560px){ .process{grid-template-columns:1fr; padding-left:0;} }
+
+
+/* Hero background video: anchor the crop to the TOP so people's heads are not cut off.
+   (0% = top of the video, 50% = centre, 100% = bottom. Try 10%-20% if you want a little less top.) */
+.slide-visual video.slide-photo{object-position:center 0%;}
+
+/* Home intro: wording first, then the team photo underneath it as a wide rounded banner */
+.intro-stack > div:first-child p{max-width:80ch;}
+.intro-photo{margin-top:2.2rem;}
+.intro-photo img{
+  display:block; width:100%; aspect-ratio:21 / 9; object-fit:cover; object-position:center 35%;
+  border-radius:20px; box-shadow:0 18px 44px rgba(2,5,9,0.16); border-bottom:4px solid var(--olanji);
+}
+@media(max-width:720px){ .intro-photo img{aspect-ratio:4 / 3;} }
+
+/* Video showcase (About page): rounded frame with the orange accent line */
+.video-showcase{padding:5rem 0; background:rgba(var(--paper-rgb), var(--bg-veil)); backdrop-filter:blur(var(--bg-blur));}
+.video-frame{margin-top:1.8rem; border-radius:20px; overflow:hidden; box-shadow:0 18px 44px rgba(2,5,9,0.18); border-bottom:4px solid var(--olanji); line-height:0;}
+.video-frame .hero-video{display:block; width:100%; height:auto;}
+@media(max-width:720px){ .video-showcase{padding:3.5rem 0;} }
+
+/* Home intro video: spans the full width of the page, edge to edge (like the original strip) */
+.video-full{width:100%; margin:2.5rem 0 0; line-height:0;}
+.video-full .hero-video{display:block; width:100%; height:auto;}
+
+/* Slide 1: wording on the left, a rounded photo on the right */
+.slide-content.slide-split{
+  max-width:none;
+  display:grid; grid-template-columns:1.2fr 0.8fr; gap:3.5rem; align-items:center;
+}
+.slide-split-text h1{font-size:clamp(2rem,3.6vw,3.2rem);}
+.slide-person{justify-self:center; width:100%; max-width:460px;}
+.slide-person img{
+  display:block; width:100%; aspect-ratio:1 / 1; max-height:460px; object-fit:cover; object-position:center top;
+  border-radius:24px; box-shadow:0 20px 50px rgba(2,5,9,0.35);
+}
+@media(max-width:860px){
+  .slide-content.slide-split{grid-template-columns:1fr; gap:1.6rem;}
+  .slide-person{max-width:240px;}
+  .slide-person img{max-height:260px;}
+}
+
+/* ---- HOW WE WORK: hover (or focus / tap) a card to play its animated graphic ----
+   Pure CSS/SVG animation - no video files, loads instantly, always on-brand. */
+.process-step{cursor:pointer;}
+.process-step:focus-visible{outline:3px solid var(--white); outline-offset:3px;}
+.step-anim{
+  position:absolute; inset:0; z-index:3; border-radius:inherit; background:var(--white);
+  padding:1rem 1rem 1.1rem; display:flex; flex-direction:column;
+  opacity:0; visibility:hidden; transform:scale(0.98);
+  transition:opacity .3s ease, transform .3s ease, visibility 0s linear .3s;
+}
+.process-step:hover .step-anim, .process-step:focus-visible .step-anim, .process-step:focus-within .step-anim{
+  opacity:1; visibility:visible; transform:none; transition:opacity .3s ease, transform .3s ease, visibility 0s;
+}
+.step-anim svg{display:block; width:100%; height:auto; flex:0 0 auto;}
+.step-anim strong{display:block; margin-top:0.7rem; color:var(--ink); font-size:1.05rem; line-height:1.3;}
+.step-anim span{display:block; margin-top:0.2rem; color:var(--text); font-size:0.92rem; line-height:1.45;}
+
+/* animation helpers (they only run while the card is hovered / focused) */
+.step-anim svg *{transform-box:fill-box;}
+.a-d2{animation-delay:.25s !important;} .a-d3{animation-delay:.5s !important;}
+.a-d4{animation-delay:.75s !important;} .a-d5{animation-delay:1s !important;}
+.process-step:hover .a-lens, .process-step:focus-within .a-lens{animation:a-scan 3.6s ease-in-out infinite;}
+.process-step:hover .a-pain, .process-step:focus-within .a-pain{animation:a-pulse 1.2s ease-in-out infinite;}
+.process-step:hover .a-pop, .process-step:focus-within .a-pop{animation:a-pop 3s ease-out infinite; transform-origin:center bottom;}
+.process-step:hover .a-bot, .process-step:focus-within .a-bot{animation:a-bot 3.6s ease-in-out infinite;}
+.process-step:hover .a-check polyline, .process-step:focus-within .a-check polyline{animation:a-check 3.6s ease-in-out infinite; stroke-dasharray:40; }
+.process-step:hover .a-knob, .process-step:focus-within .a-knob{animation:a-knob 3.2s ease-in-out infinite alternate;}
+.process-step:hover .a-bar, .process-step:focus-within .a-bar{animation:a-grow 3.4s ease-out infinite; transform-origin:center bottom;}
+.process-step:hover .a-trend, .process-step:focus-within .a-trend{animation:a-draw 3.4s ease-out infinite; stroke-dasharray:320;}
+.process-step:hover .a-end, .process-step:focus-within .a-end{animation:a-pulse 1.2s ease-in-out infinite; animation-delay:1.2s;}
+.process-step:hover .a-play, .process-step:focus-within .a-play{animation:a-pulse 1.4s ease-in-out infinite; transform-origin:center;}
+.process-step:hover .a-progress, .process-step:focus-within .a-progress{animation:a-fill 3.4s ease-in-out infinite; transform-origin:left center;}
+@keyframes a-scan{0%{transform:translate(0,0);} 30%{transform:translate(120px,24px);} 60%{transform:translate(40px,48px);} 100%{transform:translate(0,0);}}
+@keyframes a-pulse{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(1.5); opacity:.6;}}
+@keyframes a-pop{0%{transform:scale(0); opacity:0;} 25%,85%{transform:scale(1); opacity:1;} 100%{transform:scale(1); opacity:0;}}
+@keyframes a-bot{0%{transform:translateX(0);} 40%{transform:translateX(96px);} 80%,100%{transform:translateX(192px);}}
+@keyframes a-check{0%,10%{stroke-dashoffset:40; opacity:0;} 40%,90%{stroke-dashoffset:0; opacity:1;} 100%{opacity:0;}}
+@keyframes a-knob{from{transform:translateX(-50px);} to{transform:translateX(120px);}}
+@keyframes a-grow{0%{transform:scaleY(0);} 45%,100%{transform:scaleY(1);}}
+@keyframes a-draw{0%{stroke-dashoffset:320;} 55%,100%{stroke-dashoffset:0;}}
+@keyframes a-fill{0%{transform:scaleX(0);} 70%,100%{transform:scaleX(1);}}
+@media(prefers-reduced-motion:reduce){ .step-anim svg *{animation:none !important;} }
+
+.process-step .step-num{z-index:5;}   /* keeps the number badge on top of the graphic */
+
+/* Space between page sections (top + bottom padding of every section).
+   Change --section-pad to taste: smaller = tighter page, larger = more breathing room. (was 5.5rem) */
+:root{--section-pad:3.25rem;}
+section{padding:var(--section-pad) 0;}
+.video-showcase{padding:var(--section-pad) 0;}
+@media(max-width:720px){ :root{--section-pad:2.5rem;} }
+
+/* Slide 1 photo: fills the whole right-hand side of the hero (top to bottom), like a feature panel */
+.slide-content.slide-split{align-self:stretch; padding-top:2.2rem; padding-bottom:3.6rem; grid-template-columns:1.05fr 0.95fr; gap:3rem;}
+.slide-person{max-width:none; width:100%; justify-self:stretch; align-self:stretch; min-height:0;}
+.slide-person img{width:100%; height:100%; aspect-ratio:auto; max-height:none; min-height:300px; object-fit:cover; object-position:center 20%;}
+@media(max-width:860px){
+  .slide-content.slide-split{align-self:center; padding-top:0; padding-bottom:0; grid-template-columns:1fr;}
+  .slide-person{max-width:260px; align-self:auto;}
+  .slide-person img{height:260px; min-height:0;}
+}
+/* Photo is taken out of the height calculation so the hero stays exactly 640px */
+.slide-content.slide-split{min-height:536px; box-sizing:border-box; padding-top:1.5rem; padding-bottom:3.4rem;}
+.slide-person{position:relative;}
+.slide-person img{position:absolute; inset:0; width:100%; height:100%; min-height:0;}
+@media(max-width:860px){
+  .slide-content.slide-split{min-height:0; padding-top:0; padding-bottom:0;}
+  .slide-person{height:260px;}
+  .slide-person img{position:static; height:260px;}
+}
+
+.hero-slider{padding-top:0; padding-bottom:0;}
+.slide-content.slide-split{min-height:640px; padding-top:1.2rem; padding-bottom:3.2rem;}
+@media(max-width:860px){ .hero-slider{padding-top:2rem; padding-bottom:2rem;} .slide-content.slide-split{min-height:0; padding-top:0; padding-bottom:0;} }
+@media(max-width:860px){ .slide-content.slide-split{padding-bottom:2.2rem;} }
