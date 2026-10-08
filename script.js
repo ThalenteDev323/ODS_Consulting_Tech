@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Only runs on index.html (it looks for #hero-slider, which
   // doesn't exist on the other pages, so this whole block is
   // skipped everywhere else). Auto-advances through the slides
-  // every 6 seconds, pauses while the visitor is hovering or
+  // every 5 seconds, pauses while the visitor is hovering or
   // focused on it, and lets them click the dots to jump slides.
   // ------------------------------------------------------------
   var slider = document.getElementById('hero-slider');
@@ -171,10 +171,12 @@ document.addEventListener('DOMContentLoaded', function () {
       goTo((current + 1) % slides.length);
     }
 
-    // Starts the automatic 6-second slide rotation.
+    // Starts the automatic 5-second slide rotation. (To change the speed, change 5000 - it is in milliseconds.)
+    // clearInterval first, so two timers can never run at once (that made slides change at odd moments).
     function startAutoplay() {
       if (reduceMotion) return;
-      timer = setInterval(next, 6000);
+      clearInterval(timer);
+      timer = setInterval(next, 5000);
     }
 
     // Stops the automatic rotation (used on hover/focus/manual click).
@@ -523,7 +525,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Touch-screen laptops (and some browsers) answer that question wrongly,
   // which used to switch hover off even though a mouse was in use.
   // ------------------------------------------------------------
-  var hoverCards = document.querySelectorAll('.value-card[data-modal], .capability-card[data-modal]');
+  var hoverCards = document.querySelectorAll('.value-card[data-modal], .capability-card[data-modal], .glance-card[data-modal]');
   var hoverOverlay = document.getElementById('modalOverlay');
   if (hoverCards.length && hoverOverlay) {
     var HAS_POINTER_EVENTS = !!window.PointerEvent;
@@ -555,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (vMouseX < 0) return null;
       var els = document.elementsFromPoint(vMouseX, vMouseY);
       for (var i = 0; i < els.length; i++) {
-        var c = els[i].closest ? els[i].closest('.value-card, .capability-card') : null;
+        var c = els[i].closest ? els[i].closest('.value-card, .capability-card, .glance-card') : null;
         if (c) return c;
       }
       return null;
@@ -642,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (e) {         // click anywhere else closes it
       if (!vOpenPane) return;
       if (vOpenPane.contains(e.target)) return;
-      if (e.target.closest && e.target.closest('.value-card, .capability-card')) return;
+      if (e.target.closest && e.target.closest('.value-card, .capability-card, .glance-card')) return;
       vClose();
     });
     window.addEventListener('scroll', function () {           // scrolling the page away closes a mouse-opened pane
@@ -650,3 +652,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { passive: true });
   }
 });
+
+/* ---------------------------------------------------------------
+   VIDEO SHOWCASE
+   Plays the video only while it is on screen; pauses when scrolled away.
+--------------------------------------------------------------- */
+(function () {
+  var vid = document.querySelector('.video-frame video, .video-full video');
+  if (!vid) return;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+        else { vid.pause(); }
+      });
+    }, { threshold: 0.35 }).observe(vid);
+  } else { vid.setAttribute('autoplay', ''); }
+})();
