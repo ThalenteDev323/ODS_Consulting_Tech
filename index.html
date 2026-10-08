@@ -115,6 +115,19 @@
 <section class="hero-slider" id="hero-slider" aria-roledescription="carousel" aria-label="ODS Consulting highlights">
 
   <div class="slide active" data-index="0">
+    <div class="slide-content container slide-split">
+      <div class="slide-split-text">
+        <h1>It is not about what we build.<br>It is about how we walk with you while we build it.</h1>
+        <h3>Siya Mayeza, ODS Consulting Managing Director.</h3>
+      </div>
+      <!-- To use Siya's photo later: save it as Assets/ManagingDirector.jpg (same name) and it replaces this one. -->
+      <div class="slide-person">
+        <img src="Assets/ManagingDirector.jpg" alt="Siya Mayeza, ODS Consulting Managing Director">
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" data-index="1">
     <div class="slide-visual" aria-hidden="true">
       <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
         <polyline class="chart-line" points="0,480 150,420 300,460 450,320 600,360 750,220 900,260 1050,120 1200,160" fill="none" stroke="#FFFFFF" stroke-width="3"/>
@@ -137,7 +150,7 @@
   <div class="slide-photo-overlay"></div>
 </div>
 
-  <div class="slide" data-index="1">
+  <div class="slide" data-index="2">
     <div class="slide-visual" aria-hidden="true">
       <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
         <g transform="translate(700,180)">
@@ -160,7 +173,7 @@
     </div>
   </div>
 
-  <div class="slide" data-index="2">
+  <div class="slide" data-index="3">
     <div class="slide-visual" aria-hidden="true">
       <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
         <line class="node-line" x1="260" y1="180" x2="560" y2="260" stroke="#F6F5F1" stroke-opacity="0.3" stroke-width="1.5"/>
@@ -173,7 +186,7 @@
       </svg>
     </div>
     <div class="slide-content container">
-      <span class="eyebrow">16+ Years of Experience</span>
+      <span class="eyebrow">18+ Years of Experience</span>
       <h1>Trusted by finance teams in four countries.</h1>
       <p>From South Africa to the United Kingdom, Australia and the USA &mdash; we work with finance teams who need their numbers right and their reporting fast.</p>
       <div class="btn-row">
@@ -187,35 +200,38 @@
     <button class="dot active" data-index="0" aria-label="Show slide 1"></button>
     <button class="dot" data-index="1" aria-label="Show slide 2"></button>
     <button class="dot" data-index="2" aria-label="Show slide 3"></button>
+    <button class="dot" data-index="3" aria-label="Show slide 4"></button>
   </div>
 
 </section>
 
-<!-- Standalone video section, sitting below the hero slideshow rather
-     than inside it - simpler and more reliable than trying to make a
-     real <video> element behave like one of the rotating slides. -->
-<section class="video-section">
-  <video class="hero-video" autoplay muted loop playsinline poster="Assets/hero-video-poster.jpg">
-    <source src="Assets/hero-video-slide4.mp4" type="video/mp4">
-  </video>
-</section>
-
 <!-- "Business Performance Management Consultancy" intro + stats -->
 <section class="section-light">
-  <div class="container split">
+  <div class="container intro-stack">
     <div>
       <span class="eyebrow">Business Performance Management Consultancy</span>
       <h2>We make data tools feel human, not hard.</h2>
       <p style="font-size:1.1rem; color:var(--slate); max-width:70ch;">ODS Consulting helps finance teams plan, forecast and report with confidence &mdash; through IBM Planning Analytics and Power BI implementations delivered with real support, not just software.</p>
-      <div class="intro-stats">
-        <div><strong data-count-to="16" data-suffix="+">0</strong><span>Years in financial performance &amp; analytics</span></div>
-        <div><strong data-count-to="4">0</strong><span>Countries served: SA, UK, Australia, USA</span></div>
-        <div><strong data-count-to="2">0</strong><span>Core platforms: IBM Planning Analytics &amp; Power BI</span></div>
-      </div>
     </div>
     
-    <div class="split-photo">
-      <img src="Assets/TeamPhoto.jpg" alt="The ODS Consulting team">
+  </div>
+
+  <!-- VIDEO: full page width, edge to edge. Plays only while on screen (script.js, "VIDEO SHOWCASE") -->
+  <div class="video-full">
+    <video class="hero-video" muted loop playsinline preload="metadata" poster="Assets/hero-video-poster.jpg">
+      <source src="Assets/hero-video-slide4.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- AT A GLANCE: four key-fact cards. The numbers count up on scroll
+       (script.js, "stat counters"). Alternating tint on each card. -->
+  <div class="container glance">
+    <span class="eyebrow">At a glance</span>
+    <div class="glance-grid">
+      <div class="glance-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="years"><strong><span data-count-to="18" data-suffix="+">0</span></strong><em>Years</em><p>Financial performance &amp; analytics experience</p></div>
+      <div class="glance-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="markets"><strong><span data-count-to="4">0</span></strong><em>Markets</em><p>South Africa &bull; UK &bull; Australia &bull; USA</p></div>
+      <div class="glance-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="platforms"><strong><span data-count-to="2">0</span></strong><em>Core platforms</em><p>IBM Planning Analytics &amp; Power BI</p></div>
+      <div class="glance-card" tabindex="0" role="button" aria-haspopup="dialog" data-modal="delivery"><strong>End-to-end</strong><em>Delivery</em><p>Implementation &bull; Optimisation &bull; Support</p></div>
     </div>
   </div>
 </section>
@@ -228,19 +244,19 @@
     <div class="service-list">
       <div class="service-item">
         <h3>IBM Planning Analytics (TM1)</h3>
-        <p>We design, deploy and optimise Planning Analytics models to simplify planning and empower data-driven decisions.</p>
+        <p><strong>Simpler planning, smarter decisions.</strong><span>We design, deploy and optimise Planning Analytics models.</span></p>
       </div>
       <div class="service-item">
         <h3>Microsoft Power BI</h3>
-        <p>We connect your data and build interactive dashboards that unlock real-time insight for faster decisions.</p>
+        <p><strong>Real-time insight, faster decisions.</strong><span>We connect your data and build interactive dashboards.</span></p>
       </div>
       <div class="service-item">
         <h3>Data Centralisation &amp; Automation</h3>
-        <p>We centralise data and automate workflows with SQL, Python and more, so teams spend less time compiling and more time analysing.</p>
+        <p><strong>Less compiling, more analysing.</strong><span>We centralise data and automate workflows with SQL, Python and more.</span></p>
       </div>
       <div class="service-item">
         <h3>Training &amp; Support</h3>
-        <p>Hands-on training, change management and SLA-based support that turn new tools into confident, everyday use.</p>
+        <p><strong>New tools, confident everyday use.</strong><span>Hands-on training, change management and SLA-based support.</span></p>
       </div>
     </div>
     <a href="services.html" class="btn btn-outline-dark" style="margin-top:1rem;">View all services</a>
@@ -267,25 +283,121 @@
 
     <div class="process">
       <div class="process-track" aria-hidden="true"><div class="process-track-fill" id="processTrackFill"></div></div>
-      <div class="process-step" data-step="1">
+      <div class="process-step" tabindex="0" data-step="1">
         <div class="step-num">01</div>
+        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><line x1="20" y1="20" x2="15.8" y2="15.8"/></svg></div>
         <h3>Discover</h3>
-        <p style="color: black; font-weight: bold;">Discovery sessions and diagnostics identify the real operational pain points, with your key users at the table.</p>
+        <p class="step-lead">Find the real pain points.</p>
+        <p class="step-detail">Discovery sessions and diagnostics, with your key users at the table.</p>
+        <div class="step-anim" aria-hidden="true">
+          <svg viewBox="0 0 300 170" role="img">
+  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
+  <g class="a-rows">
+    <rect x="24" y="22" width="190" height="12" rx="6" fill="#cfd6d9"/>
+    <rect x="24" y="46" width="150" height="12" rx="6" fill="#cfd6d9"/>
+    <rect x="24" y="70" width="210" height="12" rx="6" fill="#cfd6d9"/>
+    <rect x="24" y="94" width="170" height="12" rx="6" fill="#cfd6d9"/>
+    <circle class="a-pain" cx="250" cy="28" r="7" fill="#ffa500"/>
+    <circle class="a-pain a-d2" cx="250" cy="76" r="7" fill="#ffa500"/>
+    <circle class="a-pain a-d3" cx="250" cy="100" r="7" fill="#ffa500"/>
+  </g>
+  <g class="a-lens">
+    <circle cx="60" cy="40" r="20" fill="rgba(255,255,255,0.55)" stroke="#018382" stroke-width="5"/>
+    <line x1="75" y1="55" x2="92" y2="72" stroke="#018382" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g class="a-people" fill="#01A4A3">
+    <g class="a-pop"><circle cx="90" cy="130" r="9"/><path d="M74 156a16 14 0 0 1 32 0z"/></g>
+    <g class="a-pop a-d2"><circle cx="150" cy="130" r="9"/><path d="M134 156a16 14 0 0 1 32 0z"/></g>
+    <g class="a-pop a-d3"><circle cx="210" cy="130" r="9"/><path d="M194 156a16 14 0 0 1 32 0z"/></g>
+  </g>
+</svg>
+          <strong>See where the time is lost</strong>
+          <span>Workshops and diagnostics with your key users reveal the real pain points.</span>
+        </div>
       </div>
-      <div class="process-step" data-step="2">
+      <div class="process-step" tabindex="0" data-step="2">
         <div class="step-num">02</div>
+        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2.3" fill="white"/><circle cx="15" cy="17" r="2.3" fill="white"/></svg></div>
         <h3>Adapt</h3>
-        <p style="color: black; font-weight: bold;">We use RPA, AI agents and other technology to customise models around your workflow, not the other way round.</p>
+        <p class="step-lead">Fit the tools to your workflow.</p>
+        <p class="step-detail">We use RPA, AI agents and other technology to customise models around how you work &mdash; not the other way round.</p>
+        <div class="step-anim" aria-hidden="true">
+          <svg viewBox="0 0 300 170" role="img">
+  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
+  <line x1="84" y1="70" x2="108" y2="70" stroke="#018382" stroke-width="3"/>
+  <line x1="192" y1="70" x2="216" y2="70" stroke="#018382" stroke-width="3"/>
+  <rect x="24" y="48" width="60" height="44" rx="10" fill="#fff" stroke="#01A4A3" stroke-width="3"/>
+  <rect x="108" y="48" width="84" height="44" rx="10" fill="#fff" stroke="#01A4A3" stroke-width="3"/>
+  <rect x="216" y="48" width="60" height="44" rx="10" fill="#fff" stroke="#01A4A3" stroke-width="3"/>
+  <g class="a-check" fill="none" stroke="#01A4A3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="42,70 50,78 66,62"/>
+    <polyline points="138,70 146,78 162,62" class="a-d2"/>
+    <polyline points="234,70 242,78 258,62" class="a-d3"/>
+  </g>
+  <g class="a-bot">
+    <circle cx="54" cy="30" r="12" fill="#ffa500"/>
+    <path d="M56 22l-6 9h5l-2 8 7-10h-5z" fill="#fff"/>
+  </g>
+  <line x1="30" y1="128" x2="270" y2="128" stroke="#cfd6d9" stroke-width="4" stroke-linecap="round"/>
+  <line x1="30" y1="150" x2="270" y2="150" stroke="#cfd6d9" stroke-width="4" stroke-linecap="round"/>
+  <circle class="a-knob" cx="80" cy="128" r="8" fill="#018382"/>
+  <circle class="a-knob a-d2" cx="200" cy="150" r="8" fill="#018382"/>
+</svg>
+          <strong>Automation around you</strong>
+          <span>RPA and AI agents tailor the workflow, so your process stays yours.</span>
+        </div>
       </div>
-      <div class="process-step" data-step="3">
+      <div class="process-step" tabindex="0" data-step="3">
         <div class="step-num">03</div>
+        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/><line x1="19" y1="20" x2="19" y2="9"/></svg></div>
         <h3>Analyse</h3>
-        <p style="color: black; font-weight: bold;">Dynamic, user-friendly reports and visualisations do the heavy lifting, so your team focuses on analysis, not compiling.</p>
+        <p class="step-lead">Let reports do the heavy lifting.</p>
+        <p class="step-detail">Dynamic, user-friendly reports and visualisations, so your team focuses on analysis, not compiling.</p>
+        <div class="step-anim" aria-hidden="true">
+          <svg viewBox="0 0 300 170" role="img">
+  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
+  <line x1="30" y1="140" x2="280" y2="140" stroke="#9aa5aa" stroke-width="2"/>
+  <g fill="#01A4A3">
+    <rect class="a-bar" x="44" y="90" width="30" height="50" rx="4"/>
+    <rect class="a-bar a-d2" x="94" y="70" width="30" height="70" rx="4"/>
+    <rect class="a-bar a-d3" x="144" y="100" width="30" height="40" rx="4"/>
+    <rect class="a-bar a-d4" x="194" y="50" width="30" height="90" rx="4"/>
+    <rect class="a-bar a-d5" x="244" y="30" width="30" height="110" rx="4"/>
+  </g>
+  <polyline class="a-trend" points="59,84 109,62 159,92 209,42 259,22" fill="none" stroke="#ffa500" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle class="a-end" cx="259" cy="22" r="7" fill="#ffa500"/>
+</svg>
+          <strong>From spreadsheets to insight</strong>
+          <span>Live, interactive reports replace manual compiling.</span>
+        </div>
       </div>
-      <div class="process-step" data-step="4">
+      <div class="process-step" tabindex="0" data-step="4">
         <div class="step-num">04</div>
+        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><path d="M16 5.5a3 3 0 0 1 0 5.8M18 14.3c1.6.6 2.6 2.1 3 4.7"/></svg></div>
         <h3>Train</h3>
-        <p style="color: black; font-weight: bold;">Hands-on training, on-demand tutorials and coaching turn reluctant users into confident analysts.</p>
+        <p class="step-lead">Turn users into confident analysts.</p>
+        <p class="step-detail">Hands-on training, on-demand tutorials and coaching.</p>
+        <div class="step-anim" aria-hidden="true">
+          <svg viewBox="0 0 300 170" role="img">
+  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
+  <rect x="70" y="16" width="160" height="82" rx="10" fill="#fff" stroke="#01A4A3" stroke-width="3"/>
+  <polygon class="a-play" points="140,38 140,76 172,57" fill="#01A4A3"/>
+  <rect x="70" y="108" width="160" height="8" rx="4" fill="#cfd6d9"/>
+  <rect class="a-progress" x="70" y="108" width="160" height="8" rx="4" fill="#ffa500"/>
+  <g fill="#01A4A3">
+    <g class="a-pop"><circle cx="90" cy="134" r="7"/><path d="M78 160a12 11 0 0 1 24 0z"/></g>
+    <g class="a-pop a-d2"><circle cx="150" cy="134" r="7"/><path d="M138 160a12 11 0 0 1 24 0z"/></g>
+    <g class="a-pop a-d3"><circle cx="210" cy="134" r="7"/><path d="M198 160a12 11 0 0 1 24 0z"/></g>
+  </g>
+  <g class="a-badges" fill="none" stroke="#ffa500" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline class="a-pop" points="104,126 108,130 115,121"/>
+    <polyline class="a-pop a-d2" points="164,126 168,130 175,121"/>
+    <polyline class="a-pop a-d3" points="224,126 228,130 235,121"/>
+  </g>
+</svg>
+          <strong>Learn it, then own it</strong>
+          <span>Hands-on sessions and on-demand tutorials build confident users.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -295,6 +407,7 @@
 </div>
 </section>
 
+<!-- REMOVED: "Ready to move beyond spreadsheet chaos?" band. To bring it back, delete the two comment markers around the block below.
 <div class="cta-band cta-band-light cta-band-stacked">
   <div class="ambient-lines ambient-chart" aria-hidden="true">
     <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
@@ -309,6 +422,7 @@
     </div>
   </div>
 </div>
+-->
 <!-- =======================  SITE FOOTER  =======================
      Shared across every page: logo + blurb, a shortened sitemap,
      and contact details. Kept deliberately compact/low-height. -->
@@ -339,9 +453,80 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; 2026 ODS Consulting. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="7.5" cy="7" r="0.9" fill="currentColor" stroke="none"/><line x1="7.5" y1="10.2" x2="7.5" y2="16.5"/><line x1="11.7" y1="10.2" x2="11.7" y2="16.5"/><path d="M11.7 13a2 2 0 0 1 4 0v3.5"/></svg></a>
+        <a href="#" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M13.6 21v-6.8h2.1l.3-2.5h-2.4V9.9c0-.7.2-1.2 1.2-1.2h1.3V6.4c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.2-3.2 3.3v1.9H8.8v2.5h2.2V21"/></svg></a>
+      </div>
     </div>
   </div>
 </footer>
+
+
+<!-- ===============  "AT A GLANCE" DETAIL PANES  ===============
+     Hovering (or tapping) a card in the At a glance row opens the pane
+     whose id matches the card's data-modal. All four share the
+     .modal-glance class so they are exactly the same size. Logic is the
+     same as the Services/Our Values panes (script.js, section 9). -->
+<div class="modal-overlay" id="modalOverlay" aria-hidden="true"></div>
+
+<div class="modal-pane modal-glance" id="modal-years" role="dialog" aria-modal="true" aria-labelledby="modal-years-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-media"><img src="Assets/GrowthChart.jpg" alt="Growth chart"></div>
+  <div class="modal-body">
+    <h2 id="modal-years-title">18+ years of financial performance &amp; analytics</h2>
+    <p>Our consultants bring nearly two decades of hands-on experience helping finance teams plan, forecast and report with confidence.</p>
+    <ul class="feature-list">
+      <li>Budgeting, forecasting and planning models</li>
+      <li>Management and financial reporting</li>
+      <li>Planning Analytics and Power BI implementations</li>
+      <li>Practical know-how from real finance teams</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-pane modal-glance" id="modal-markets" role="dialog" aria-modal="true" aria-labelledby="modal-markets-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-media"><img src="Assets/Skyscrapers.jpg" alt="City skyline"></div>
+  <div class="modal-body">
+    <h2 id="modal-markets-title">Four markets, one standard of delivery</h2>
+    <p>Based in Umhlanga Ridge, South Africa, we support finance teams across four markets with the same hands-on, human-centred approach.</p>
+    <ul class="feature-list">
+      <li>South Africa</li>
+      <li>United Kingdom</li>
+      <li>Australia</li>
+      <li>United States</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-pane modal-glance" id="modal-platforms" role="dialog" aria-modal="true" aria-labelledby="modal-platforms-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-media"><img src="Assets/PowerBI.jpg" alt="Power BI dashboard in use"></div>
+  <div class="modal-body">
+    <h2 id="modal-platforms-title">Two core platforms, built to work together</h2>
+    <p>We specialise in IBM Planning Analytics (TM1) for planning and forecasting, and Microsoft Power BI for dashboards and reporting &mdash; connected so insight doesn't wait for month-end.</p>
+    <ul class="feature-list">
+      <li>IBM Planning Analytics (TM1): models, workflows, integration</li>
+      <li>Microsoft Power BI: data modelling, dashboards, security</li>
+      <li>Training so your team can run and extend them</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-pane modal-glance" id="modal-delivery" role="dialog" aria-modal="true" aria-labelledby="modal-delivery-title">
+  <button class="modal-close" aria-label="Close">&times;</button>
+  <div class="modal-media"><div class="deliver-card"><span class="deliver-eyebrow">What we deliver</span><h3>Bridge the gap between finance, technology and decision-making.</h3><span class="deliver-rule"></span><p>Practical solutions. Human-centred delivery. Long-term partnership.</p></div></div>
+  <div class="modal-body">
+    <h2 id="modal-delivery-title">End-to-end delivery, from first workshop to ongoing support</h2>
+    <p>We stay with you from design through go-live and beyond, so you are never left alone with the software.</p>
+    <ul class="feature-list">
+      <li>Implementation: design, build and go-live</li>
+      <li>Optimisation: performance and process improvements</li>
+      <li>Support: a real team on the other end of the line</li>
+    </ul>
+  </div>
+</div>
 
 <script src="script.js"></script>
 
