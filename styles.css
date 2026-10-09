@@ -198,7 +198,7 @@ section{padding:5.5rem 0;}
   transition:color .15s ease, background .15s ease;
 }
 .nav-links a:hover{background:rgba(var(--teal-rgb),0.14);}
-.nav-links a.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--teal);}
+.nav-links a.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--olanji);}
 
 /* "Company" dropdown inside the top nav (Why ODS / About / Our Values) */
 .nav-dropdown{position:relative;}
@@ -214,7 +214,7 @@ section{padding:5.5rem 0;}
 }
 .nav-dropdown-trigger:hover,
 .nav-dropdown-trigger[aria-expanded="true"]{background:rgba(var(--teal-rgb),0.14);}
-.nav-dropdown-trigger.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--teal);}
+.nav-dropdown-trigger.active{background:rgba(var(--teal-rgb),0.18); box-shadow:inset 0 -2px 0 var(--olanji);}
 .nav-dropdown-trigger .chevron{transition:transform .2s ease;}
 .nav-dropdown-trigger[aria-expanded="true"] .chevron{transform:rotate(180deg);}
 .nav-dropdown-menu{
@@ -1678,3 +1678,57 @@ section{padding:var(--section-pad) 0;}
 .slide-content.slide-split{min-height:640px; padding-top:1.2rem; padding-bottom:3.2rem;}
 @media(max-width:860px){ .hero-slider{padding-top:2rem; padding-bottom:2rem;} .slide-content.slide-split{min-height:0; padding-top:0; padding-bottom:0;} }
 @media(max-width:860px){ .slide-content.slide-split{padding-bottom:2.2rem;} }
+
+/* Slide 2: big title, clear gap, comfortable paragraph */
+.slide-content:has(.slide-title){max-width:860px;}
+.slide .eyebrow.slide-title{display:block; font-size:clamp(2.4rem,5vw,4.2rem); line-height:1.1; font-weight:700; letter-spacing:-0.01em; margin:0 0 1.8rem; text-shadow:0 2px 14px rgba(2,5,9,0.25);}
+.slide p.slide-lead-p{font-size:clamp(1.1rem,1.5vw,1.3rem); line-height:1.65; color:rgba(255,255,255,0.95); max-width:62ch; margin:0 0 2.2rem; text-shadow:0 1px 10px rgba(2,5,9,0.25);}
+
+/* Keep every slide's content vertically centred in the 640px hero */
+.slide.active{min-height:640px; box-sizing:border-box;}
+.slide-content:has(.slide-title){max-width:1000px;}
+.slide .eyebrow.slide-title{font-size:clamp(2.2rem,4.2vw,3.6rem);}
+@media(max-width:860px){ .slide.active{min-height:560px;} .slide-content.slide-split{min-height:0;} }
+
+/* Larger, easier-to-read paragraph text across the site (matches the hero slide size) */
+:root{--p-size:clamp(1.1rem,1.5vw,1.3rem);}
+:where(main,section,.page-header,.slide) :is(p,.tick-list li,.callout,.step-lead,.step-detail):not(.modal-pane *):not(.glance-card *):not(.capability-card *):not(.process-step *){font-size:var(--p-size); line-height:1.65;}
+.glance-card p,.capability-card p,.values-row p,.process-step p,.step-lead,.step-detail{font-size:1.05rem; line-height:1.6;}
+.service-item p strong{font-size:calc(var(--p-size) + 0.08rem);}
+
+/* Card text brought up to match the rest of the site */
+.glance-card p,.capability-card p,.values-row p,.process-step p,.step-detail{font-size:var(--p-size); line-height:1.6;}
+.step-lead{font-size:calc(var(--p-size) + 0.05rem); line-height:1.4;}
+.glance-card .glance-label,.glance-card .label{font-size:0.9rem;}
+/* Final overrides: intro paragraph and How We Work card text */
+.intro-stack p,.intro-stack > div p{font-size:var(--p-size) !important; line-height:1.65 !important; max-width:80ch;}
+.process-step p,.process-step .step-detail,.process-step .step-lead{font-size:var(--p-size) !important; line-height:1.55 !important;}
+.process-step .step-lead{font-weight:600;}
+
+/* ===== Pop-up cards: larger, easier-to-read text (panes scroll rather than cut off) ===== */
+.modal-pane{overflow-y:auto;}
+.modal-pane .modal-body p,.modal-pane .modal-body li{font-size:1.15rem; line-height:1.55;}
+.modal-pane .p-lead,.modal-pane .values-lead{font-size:1.35rem; line-height:1.45;}
+.modal-pane .p-note{font-size:1.1rem; line-height:1.5;}
+.modal-pane .p-steps strong{font-size:1.15rem;}
+.modal-pane .p-steps span,.modal-pane .p-cards span,.modal-pane .practice-tile span:not(.practice-num){font-size:1.05rem; line-height:1.45;}
+.modal-pane .p-cards strong,.modal-pane .practice-tile strong{font-size:1.15rem;}
+.modal-pane .p-compare span,.modal-pane .p-ticks li{font-size:1.1rem; line-height:1.5;}
+.modal-pane .p-compare em{font-size:0.85rem;}
+.modal-pane .p-pills span{font-size:1rem;}
+.modal-pane .p-pills-big span{font-size:1.1rem;}
+.modal-pane .p-badges span{font-size:1rem;}
+.modal-pane .p-badges b{font-size:1.45rem;}
+.modal-pane.modal-glance{width:min(94vw, 1000px); height:min(90vh, 520px); overflow-y:auto;}
+.modal-glance .modal-body{overflow:visible;}
+.modal-glance .modal-body h2{font-size:clamp(1.6rem,2.6vw,2rem);}
+.deliver-card p{font-size:1.15rem;}
+.deliver-card .deliver-eyebrow{font-size:1rem;}
+
+/* Why ODS photo slider: second photo slides up from the bottom over the first */
+.photo-slider{position:relative; overflow:hidden; border-radius:20px; aspect-ratio:3 / 2; background:var(--paper-2);}
+.photo-slider .ps-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:0; display:block;}
+.photo-slider .ps-img{transition:transform 1s ease; will-change:transform;}
+.photo-slider .ps-next{transform:translateY(100%);}
+.photo-slider .ps-next.in{transform:translateY(0);}
+@media(prefers-reduced-motion:reduce){ .photo-slider .ps-img{transition:none;} }
