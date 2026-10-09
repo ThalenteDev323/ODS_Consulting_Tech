@@ -692,3 +692,37 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   timer = setTimeout(swap, 5000);
 })();
+
+/* ===== "CLICK HERE TO LEARN MORE" PANES (Services page) =====
+   A button with data-learn="tm1-more" opens the pane with id="modal-tm1-more".
+   Closes with the X, a click on the dark backdrop, or Escape. */
+(function () {
+  var buttons = document.querySelectorAll('[data-learn]');
+  var overlay = document.getElementById('modalOverlay');
+  if (!buttons.length || !overlay) return;
+  var openPane = null, lastButton = null;
+  function open(btn) {
+    var pane = document.getElementById('modal-' + btn.getAttribute('data-learn'));
+    if (!pane) return;
+    openPane = pane; lastButton = btn;
+    overlay.classList.remove('is-hover');
+    overlay.classList.add('open');
+    pane.classList.add('open');
+    pane.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    var x = pane.querySelector('.modal-close'); if (x) x.focus();
+  }
+  function close() {
+    if (!openPane) return;
+    openPane.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    openPane = null;
+    if (lastButton) lastButton.focus();
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { open(b); }); });
+  document.querySelectorAll('.modal-learn .modal-close').forEach(function (x) { x.addEventListener('click', close); });
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+
