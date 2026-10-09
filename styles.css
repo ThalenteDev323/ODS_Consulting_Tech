@@ -1800,3 +1800,27 @@ section{padding:var(--section-pad) 0;}
   .learn-cards{grid-template-columns:1fr;}
 }
 
+/* X-Factor: panels far left, comment box far right, same height */
+.xfactor .container{text-align:left;}
+.xf-layout{display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,360px); gap:1.4rem; align-items:stretch; max-width:none;}
+.xf-layout .xf-wrap{max-width:none; width:100%; margin:0;}
+.xf-note{background:var(--white); border-radius:22px; border-top:5px solid var(--olanji); box-shadow:0 18px 44px rgba(2,5,9,0.18); padding:1.8rem 1.7rem; display:flex; flex-direction:column; justify-content:center; text-align:left; position:relative;}
+.xf-note::before{content:"\201C"; position:absolute; top:0.2rem; right:1.2rem; font-size:5rem; line-height:1; color:rgba(var(--teal-rgb),0.2); font-family:Georgia,serif;}
+.xf-note-tag{font-size:0.85rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--teal-dark); margin-bottom:0.7rem;}
+.xf-note .xf-note-lead{font-size:1.2rem; line-height:1.45; font-weight:700; color:var(--ink); margin:0 0 1.1rem; max-width:none;}
+.xf-note h3{font-size:1.1rem; color:var(--teal-dark); margin:0 0 0.6rem; padding-left:0.7rem; border-left:4px solid var(--olanji);}
+.xf-note ul{list-style:none; margin:0; padding:0;}
+.xf-note li{position:relative; padding:0.3rem 0 0.3rem 1.5rem; font-size:1rem; line-height:1.5; color:var(--slate);}
+.xf-note li::before{content:""; position:absolute; left:0; top:0.75rem; width:0.7rem; height:0.7rem; border-radius:50%; background:var(--teal);}
+@media(max-width:1000px){ .xf-layout{grid-template-columns:1fr;} .xf-note{padding:1.6rem;} }
+
+.xf-note li{font-size:1.08rem;}
+
+/* ===== Knowledge Hub page ("coming soon") ===== */
+.kh-main{min-height:62vh; display:flex; align-items:center; justify-content:center; padding:7rem 0 5rem;}
+.kh-main .container{display:flex; justify-content:center;}
+.kh-pane{background:rgba(255,255,255,0.94); border-top:5px solid var(--olanji); border-radius:22px; box-shadow:0 24px 60px rgba(2,5,9,0.25); padding:3rem clamp(1.6rem,5vw,4rem) 3rem; text-align:center; max-width:640px; width:100%;}
+.kh-tag{display:block; font-size:1rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal-dark); margin-bottom:0.6rem;}
+.kh-pane h1{font-size:clamp(2.4rem,5vw,3.6rem); color:var(--ink); margin:0;}
+.kh-rule{display:block; width:90px; height:3px; background:var(--olanji); margin:1rem auto 1.4rem;}
+.kh-pane p{font-size:var(--p-size); line-height:1.65; color:var(--slate); margin:0 auto 1.8rem; max-width:48ch;}
