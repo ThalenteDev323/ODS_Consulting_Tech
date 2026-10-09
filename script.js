@@ -669,3 +669,26 @@ document.addEventListener('DOMContentLoaded', function () {
     }, { threshold: 0.35 }).observe(vid);
   } else { vid.setAttribute('autoplay', ''); }
 })();
+
+/* ===== WHY ODS PHOTO SLIDER =====
+   Photo 1 shows for 5s, photo 2 slides up from the bottom and stays 10s, then photo 1 slides back up, and so on. */
+(function(){
+  var box = document.getElementById('photoSlider');
+  if (!box) return;
+  var a = box.querySelector('.ps-current'), b = box.querySelector('.ps-next');
+  if (!a || !b) return;
+  var showingFirst = true, timer;
+  function swap(){
+    /* the photo coming in is placed below, then slides up over the other */
+    var incoming = showingFirst ? b : a, outgoing = showingFirst ? a : b;
+    incoming.style.transition = 'none';
+    incoming.style.transform = 'translateY(100%)';
+    incoming.style.zIndex = 2; outgoing.style.zIndex = 1;
+    void incoming.offsetWidth;
+    incoming.style.transition = '';
+    incoming.style.transform = 'translateY(0)';
+    showingFirst = !showingFirst;
+    timer = setTimeout(swap, showingFirst ? 5000 : 10000);
+  }
+  timer = setTimeout(swap, 5000);
+})();
