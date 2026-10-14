@@ -340,9 +340,21 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.textContent = 'Sending...';
       setStatus('', '');
 
+      // Privacy-policy tick-box + "I'm not a robot" check (see "CONSENT + RECAPTCHA" at the bottom of this file)
+      var captcha = window.odsCaptcha;
+      if (captcha && !captcha.isReady()) {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        setStatus('Please tick the box to agree to the privacy policy and complete the \u201cI\u2019m not a robot\u201d check.', 'error');
+        captcha.focusBox();
+        return;
+      }
+      var payload = new FormData(form);
+      if (captcha && captcha.token()) payload.set('g-recaptcha-response', captcha.token());
+
       fetch(form.action, {
         method: 'POST',
-        body: new FormData(form),
+        body: payload,
         headers: { 'Accept': 'application/json' }
       })
         .then(function (response) {
@@ -351,6 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.disabled = false;
             setStatus('Thanks - your message has been sent. We\u2019ll be in touch shortly.', 'success');
             form.reset();
+            if (captcha) captcha.reset();
           } else {
             return response.json().then(function (data) {
               throw new Error((data && data.errors) ? data.errors.map(function (x) { return x.message; }).join(', ') : 'Submission failed');
@@ -726,3 +739,102 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 })();
 
+/* ===== CONSENT + RECAPTCHA (Contact page) =====
+   Ticking "I understand and agree to the privacy policy" opens a pop-up with Google's
+   "I'm not a robot" check. Solve it -> the tick stays and shows "Verified". Cancel or
+   let it expire -> the tick is removed. The token is sent to Formspree with the message.
+   The site key is set in contact.html (window.ODS_RECAPTCHA_SITE_KEY). */
+(function () {
+  var box = document.getElementById('consent');
+  var overlay = document.getElementById('captchaOverlay');
+  if (!box || !overlay) return;
+  var holder = document.getElementById('captchaBox');
+  var verified = document.getElementById('consentVerified');
+  var closeBtn = document.getElementById('captchaClose');
+  var SITE_KEY = window.ODS_RECAPTCHA_SITE_KEY || '';
+  var configured = SITE_KEY && SITE_KEY.indexOf('YOUR_') !== 0;
+  var widgetId = null, token = '', apiRequested = false, wantOpen = false;
+
+  function showVerified(on) { if (verified) verified.hidden = !on; }
+  function openPop() { overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false'); }
+  function closePop() { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true'); }
+
+  function onSolved(t) { token = t; showVerified(true); closePop(); }
+  function onGone() { token = ''; showVerified(false); box.checked = false; }
+
+  function renderWidget() {
+    if (widgetId !== null || !window.grecaptcha || !window.grecaptcha.render) return;
+    widgetId = window.grecaptcha.render(holder, {
+      sitekey: SITE_KEY, callback: onSolved,
+      'expired-callback': onGone, 'error-callback': function () { closePop(); onGone(); }
+    });
+  }
+  window.odsCaptchaReady = function () { renderWidget(); if (wantOpen) openPop(); };
+
+  function loadApi() {
+    if (apiRequested) return;
+    apiRequested = true;
+    var s = document.createElement('script');
+    s.src = 'https://www.google.com/recaptcha/api.js?onload=odsCaptchaReady&render=explicit';
+    s.async = true; s.defer = true;
+    document.head.appendChild(s);
+  }
+
+  box.addEventListener('change', function () {
+    if (!box.checked) {                                   // unticked: forget the check
+      token = ''; showVerified(false);
+      if (widgetId !== null && window.grecaptcha) window.grecaptcha.reset(widgetId);
+      return;
+    }
+    if (!configured) { if (window.console) console.warn('reCAPTCHA site key not set in contact.html - robot check skipped.'); return; }
+    wantOpen = true;
+    openPop();
+    if (window.grecaptcha && window.grecaptcha.render) renderWidget(); else loadApi();
+  });
+
+  function cancel() { closePop(); wantOpen = false; if (!token) { box.checked = false; showVerified(false); } }
+  if (closeBtn) closeBtn.addEventListener('click', cancel);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) cancel(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('open')) cancel(); });
+
+  window.odsCaptcha = {
+    token: function () { return token; },
+    isReady: function () { return box.checked && (!configured || !!token); },
+    focusBox: function () { box.focus(); },
+    reset: function () {
+      token = ''; box.checked = false; showVerified(false);
+      if (widgetId !== null && window.grecaptcha) window.grecaptcha.reset(widgetId);
+    }
+  };
+})();
+
+
+/* ============================================================
+   SERVICES TABS ("What We Deliver")
+   Click a tab (or use the arrow keys) to show that service.
+   ============================================================ */
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.svc-tab'));
+  if(!tabs.length) return;
+  function show(tab,focus){
+    tabs.forEach(function(t){
+      var on=t===tab, p=document.getElementById(t.getAttribute('aria-controls'));
+      t.classList.toggle('active',on);
+      t.setAttribute('aria-selected',on?'true':'false');
+      t.tabIndex=on?0:-1;
+      if(p){ p.classList.toggle('active',on); if(on){p.removeAttribute('hidden');}else{p.setAttribute('hidden','');} }
+    });
+    if(focus) tab.focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(t,false);});
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight') n=tabs[(i+1)%tabs.length];
+      else if(e.key==='ArrowLeft') n=tabs[(i-1+tabs.length)%tabs.length];
+      else if(e.key==='Home') n=tabs[0];
+      else if(e.key==='End') n=tabs[tabs.length-1];
+      if(n){e.preventDefault();show(n,true);}
+    });
+  });
+})();
