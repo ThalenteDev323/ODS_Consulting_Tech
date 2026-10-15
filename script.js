@@ -171,12 +171,12 @@ document.addEventListener('DOMContentLoaded', function () {
       goTo((current + 1) % slides.length);
     }
 
-    // Starts the automatic 5-second slide rotation. (To change the speed, change 5000 - it is in milliseconds.)
+    // Starts the automatic 10-second slide rotation. (To change the speed, change 10000 - it is in milliseconds.)
     // clearInterval first, so two timers can never run at once (that made slides change at odd moments).
     function startAutoplay() {
       if (reduceMotion) return;
       clearInterval(timer);
-      timer = setInterval(next, 5000);
+      timer = setInterval(next, 10000);
     }
 
     // Stops the automatic rotation (used on hover/focus/manual click).
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     function start() {
       if (reduceMotion) return;
-      timer = setInterval(next, 5500);
+      timer = setInterval(next, 10000);
     }
     function stop() {
       clearInterval(timer);
@@ -837,4 +837,29 @@ document.addEventListener('DOMContentLoaded', function () {
       if(n){e.preventDefault();show(n,true);}
     });
   });
+})();
+
+/* ============================================================
+   COOKIE NOTICE
+   Small notice shown on the first visit. Clicking "Accept"
+   remembers the choice in the browser (localStorage) so it
+   isn't shown again. If you later add analytics or ad tracking,
+   only load those scripts after this has been accepted
+   (check localStorage 'odsCookieNotice' === 'accepted').
+   ============================================================ */
+(function(){
+  var KEY='odsCookieNotice';
+  try{ if(localStorage.getItem(KEY)==='accepted') return; }catch(e){}
+  var box=document.createElement('div');
+  box.className='cookie-notice';
+  box.setAttribute('role','dialog');
+  box.setAttribute('aria-label','Cookie notice');
+  box.innerHTML='<p>We use a small number of cookies, mainly to keep our contact form secure (Google reCAPTCHA). We do not use advertising or tracking cookies. Read our <a href="privacy-policy.html#cookies">Privacy Policy</a> to learn more.</p><button type="button" class="cookie-accept">Accept</button>';
+  function show(){ document.body.appendChild(box); requestAnimationFrame(function(){ box.classList.add('show'); }); }
+  box.querySelector('.cookie-accept').addEventListener('click',function(){
+    try{ localStorage.setItem(KEY,'accepted'); }catch(e){}
+    box.classList.remove('show');
+    setTimeout(function(){ if(box.parentNode) box.parentNode.removeChild(box); },300);
+  });
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',show); else show();
 })();
