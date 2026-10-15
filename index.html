@@ -118,15 +118,9 @@
 <section class="hero-slider" id="hero-slider" aria-roledescription="carousel" aria-label="ODS Consulting highlights">
 
   <div class="slide active" data-index="0">
-    <div class="slide-content container slide-split">
-      <div class="slide-split-text">
-        <h1>It is not about what we build.<br>It is about how we walk with you while we build it.</h1>
-        <h3>Siya Mayeza, ODS Consulting Managing Director.</h3>
-      </div>
-      <!-- To use Siya's photo later: save it as Assets/ManagingDirector.jpg (same name) and it replaces this one. -->
-      <div class="slide-person">
-        <img src="Assets/ManagingDirector.jpg" alt="Siya Mayeza, ODS Consulting Managing Director">
-      </div>
+    <div class="slide-brand">
+      <img src="Assets/logo-hero-slide.png" alt="ODS Consulting" class="slide-brand-logo">
+      <p class="slide-brand-tag">Humanising Performance Management</p>
     </div>
   </div>
 
@@ -209,20 +203,18 @@
 
 <!-- "Business Performance Management Consultancy" intro + stats -->
 <section class="section-light">
-  <div class="container intro-stack">
+  <!-- Text on the left, video on the right (side by side). The video plays only while on screen (script.js, "VIDEO SHOWCASE") -->
+  <div class="container intro-stack intro-split">
     <div>
       <span class="eyebrow">Humanising Performance Management</span>
-      <h2>We make data tools feel human, not hard.</h2>
+      <h2>We make data tools feel human&nbsp;&mdash;<br>not hard.</h2>
       <p style="font-size:1.1rem; color:var(--slate); max-width:70ch;">Our mission is simple: to make data tools feel human &mdash; not hard.<br>With deep expertise in IBM Planning Analytics, Power BI, and business intelligence solutions, we don&rsquo;t just implement technology &mdash; we guide, support, and transform how teams interact with their data, helping organizations achieve accurate forecasting, streamlined reporting, and actionable insights.</p>
     </div>
-    
-  </div>
-
-  <!-- VIDEO: full page width, edge to edge. Plays only while on screen (script.js, "VIDEO SHOWCASE") -->
-  <div class="video-full">
-    <video class="hero-video" muted loop playsinline preload="metadata" poster="Assets/hero-video-poster.jpg">
-      <source src="Assets/hero-video-slide4.mp4" type="video/mp4">
-    </video>
+    <div class="video-frame intro-video">
+      <video class="hero-video" muted loop playsinline preload="metadata" poster="Assets/hero-video-poster.jpg">
+        <source src="Assets/hero-video-slide4.mp4" type="video/mp4">
+      </video>
+    </div>
   </div>
 
   <!-- AT A GLANCE: four key-fact cards. The numbers count up on scroll
@@ -319,6 +311,30 @@
       </div>
       <div class="process-step" tabindex="0" data-step="2">
         <div class="step-num">02</div>
+        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/><line x1="19" y1="20" x2="19" y2="9"/></svg></div>
+        <h3>Analyse</h3>
+        <p class="step-lead">Let reports do the heavy lifting.</p>
+        <p class="step-detail">Dynamic, user-friendly reports and visualisations, so your team focuses on analysis, not compiling.</p>
+        <div class="step-anim" aria-hidden="true">
+          <svg viewBox="0 0 300 170" role="img">
+  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
+  <line x1="30" y1="140" x2="280" y2="140" stroke="#9aa5aa" stroke-width="2"/>
+  <g fill="#01A4A3">
+    <rect class="a-bar" x="44" y="90" width="30" height="50" rx="4"/>
+    <rect class="a-bar a-d2" x="94" y="70" width="30" height="70" rx="4"/>
+    <rect class="a-bar a-d3" x="144" y="100" width="30" height="40" rx="4"/>
+    <rect class="a-bar a-d4" x="194" y="50" width="30" height="90" rx="4"/>
+    <rect class="a-bar a-d5" x="244" y="30" width="30" height="110" rx="4"/>
+  </g>
+  <polyline class="a-trend" points="59,84 109,62 159,92 209,42 259,22" fill="none" stroke="#ffa500" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle class="a-end" cx="259" cy="22" r="7" fill="#ffa500"/>
+</svg>
+          <strong>From spreadsheets to insight</strong>
+          <span>Live, interactive reports replace manual compiling.</span>
+        </div>
+      </div>
+      <div class="process-step" tabindex="0" data-step="3">
+        <div class="step-num">03</div>
         <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2.3" fill="white"/><circle cx="15" cy="17" r="2.3" fill="white"/></svg></div>
         <h3>Adapt</h3>
         <p class="step-lead">Fit the tools to your workflow.</p>
@@ -347,30 +363,6 @@
 </svg>
           <strong>Automation around you</strong>
           <span>RPA and AI agents tailor the workflow, so your process stays yours.</span>
-        </div>
-      </div>
-      <div class="process-step" tabindex="0" data-step="3">
-        <div class="step-num">03</div>
-        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="5"/><line x1="19" y1="20" x2="19" y2="9"/></svg></div>
-        <h3>Analyse</h3>
-        <p class="step-lead">Let reports do the heavy lifting.</p>
-        <p class="step-detail">Dynamic, user-friendly reports and visualisations, so your team focuses on analysis, not compiling.</p>
-        <div class="step-anim" aria-hidden="true">
-          <svg viewBox="0 0 300 170" role="img">
-  <rect x="0" y="0" width="300" height="170" rx="14" fill="rgba(1,164,163,0.08)"/>
-  <line x1="30" y1="140" x2="280" y2="140" stroke="#9aa5aa" stroke-width="2"/>
-  <g fill="#01A4A3">
-    <rect class="a-bar" x="44" y="90" width="30" height="50" rx="4"/>
-    <rect class="a-bar a-d2" x="94" y="70" width="30" height="70" rx="4"/>
-    <rect class="a-bar a-d3" x="144" y="100" width="30" height="40" rx="4"/>
-    <rect class="a-bar a-d4" x="194" y="50" width="30" height="90" rx="4"/>
-    <rect class="a-bar a-d5" x="244" y="30" width="30" height="110" rx="4"/>
-  </g>
-  <polyline class="a-trend" points="59,84 109,62 159,92 209,42 259,22" fill="none" stroke="#ffa500" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle class="a-end" cx="259" cy="22" r="7" fill="#ffa500"/>
-</svg>
-          <strong>From spreadsheets to insight</strong>
-          <span>Live, interactive reports replace manual compiling.</span>
         </div>
       </div>
       <div class="process-step" tabindex="0" data-step="4">
