@@ -1965,3 +1965,28 @@ section{padding:var(--section-pad) 0;}
 .nav-social:hover{background:var(--teal-dark); color:#fff; transform:translateY(-1px);}
 .nav-social:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
 @media(max-width:560px){ .nav-social{display:none;} }
+
+/* Cookie notice */
+.cookie-notice{position:fixed; left:1.2rem; bottom:1.2rem; z-index:400; max-width:560px; display:flex; align-items:center; gap:1.1rem; background:#0f1a24; color:rgba(246,245,241,0.9); padding:1.05rem 1.3rem; border-radius:14px; box-shadow:0 12px 34px rgba(2,5,9,0.35); border-top:3px solid var(--teal); opacity:0; transform:translateY(14px); transition:opacity .3s ease, transform .3s ease;}
+.cookie-notice.show{opacity:1; transform:none;}
+.cookie-notice p{margin:0; font-size:0.92rem !important; line-height:1.5; color:rgba(246,245,241,0.9);}
+.cookie-notice a{color:#fff; text-decoration:underline;}
+.cookie-notice a:hover{color:var(--teal);}
+.cookie-accept{flex:0 0 auto; appearance:none; border:0; cursor:pointer; background:var(--teal); color:#fff; font:inherit; font-weight:700; font-size:0.92rem; padding:0.65rem 1.4rem; border-radius:999px; transition:background .2s ease;}
+.cookie-accept:hover{background:var(--teal-dark);}
+.cookie-accept:focus-visible{outline:2px solid #fff; outline-offset:2px;}
+@media(max-width:560px){ .cookie-notice{left:0.7rem; right:0.7rem; bottom:0.7rem; flex-direction:column; align-items:stretch; text-align:left;} .cookie-accept{width:100%;} }
+
+/* ---- Card hover motion (consistent across the site) ---- */
+.svc-card,.learn-cards > div,.practice-tile,.xf-card,.testimonial,.service-item{transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background-color .25s ease;}
+.svc-card:hover,.learn-cards > div:hover,.practice-tile:hover,.xf-card:hover,.testimonial:hover{transform:translateY(-5px); box-shadow:0 14px 30px rgba(2,5,9,0.16);}
+.svc-card:hover{border-color:var(--teal); border-left-color:var(--olanji);}
+.learn-cards > div:hover{border-top-color:var(--olanji);}
+.service-item:hover{transform:translateX(8px);}
+/* small badges / numbers inside cards react too */
+.svc-cards-steps .svc-card > b,.learn-cards b,.practice-num,.svc-badge > b{transition:transform .3s cubic-bezier(.3,1.6,.5,1), background-color .25s ease;}
+.svc-card:hover > b,.learn-cards > div:hover b,.practice-tile:hover .practice-num{transform:scale(1.18) rotate(-6deg);}
+.svc-cards-steps .svc-card:hover > b,.learn-cards > div:hover b{background:var(--olanji);}
+.svc-card:hover > b{display:inline-block;}
+@media(hover:none){ .svc-card:hover,.learn-cards > div:hover,.practice-tile:hover,.xf-card:hover,.testimonial:hover{transform:none;} .service-item:hover{transform:none;} }
+@media(prefers-reduced-motion:reduce){ .svc-card,.learn-cards > div,.practice-tile,.xf-card,.testimonial,.service-item,.svc-card > b,.learn-cards b,.practice-num{transition:none !important;} .svc-card:hover,.learn-cards > div:hover,.practice-tile:hover,.xf-card:hover,.testimonial:hover,.service-item:hover{transform:none !important;} }
