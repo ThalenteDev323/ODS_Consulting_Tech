@@ -2026,9 +2026,9 @@ body.big-text p:not(footer *):not(.modal-pane *):not(.cookie-notice *):not(.capt
 @media(max-width:720px){ .mini-slide p, .page-header .mini-slide p, body.big-text p:not(footer *):not(.modal-pane *):not(.cookie-notice *):not(.captcha-card *):not(.menu-panel *){font-size:18px !important;} }
 
 /* Home hero slides: a slightly darker teal background (lower the hex values for darker still) */
-.hero-slider{background:linear-gradient(135deg,#016f6e 0%,#015a59 100%);}
+.hero-slider{background:var(--teal);}
 /* Same darker teal over any photo/video behind the hero text */
-.slide-photo-overlay{background:linear-gradient(135deg, rgba(1,98,97,0.88), rgba(1,80,79,0.72));}
+.slide-photo-overlay{background:linear-gradient(135deg, rgba(var(--teal-rgb),0.82), rgba(var(--teal-rgb),0.58));}
 
 /* Hero slide 1: logo top-left, tagline bottom-right */
 .slide.active[data-index="0"]{padding:0;}
@@ -2043,3 +2043,26 @@ body.big-text p:not(footer *):not(.modal-pane *):not(.cookie-notice *):not(.capt
 .intro-split .intro-video video{width:100%; height:auto; display:block;}
 .intro-split .intro-video{margin:0 auto !important; justify-self:center;}
 .intro-split > div:first-child p, .intro-split > div:first-child h2{max-width:min(100%,1280px) !important;}
+
+/* Slide 1 only: clear photo (no teal wash); other slides keep the colour overlay */
+.slide-photo-overlay{transition:opacity .8s ease;}
+.slide-brand-tag{text-shadow:0 1px 10px rgba(0,0,0,.55);}
+@media(min-width:861px){.slide .slide-brand-tag{bottom:1.4rem;}}
+
+/* Hero slides 2-4: content nudged to the right */
+@media(min-width:861px){
+  .slide:not([data-index="0"]) .slide-content{padding-left:clamp(3rem,7vw,7rem);}
+}
+
+/* Hero slides 2-4: content block pushed right, its right edge at ~94% of the slide */
+@media(min-width:1100px){
+  .slide:not([data-index="0"]) .slide-content{max-width:none; width:100%; box-sizing:border-box; padding-left:max(7rem, calc(94% - 820px)); padding-right:6%;}
+  .slide:not([data-index="0"]) .slide-content > *{max-width:820px;}
+}
+
+
+/* Logo on hero slides 2-4, sized to sit on the chair (wide screens only) */
+.slide-side-logo{display:none;}
+@media(min-width:1100px){
+  .slide-side-logo{display:block; position:absolute; left:20.8%; top:60%; width:17.5%; max-width:360px; height:auto; z-index:3; pointer-events:none;}
+}
