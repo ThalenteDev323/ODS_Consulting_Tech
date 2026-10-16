@@ -62,12 +62,13 @@
       <li class="nav-dropdown">
         <button class="nav-dropdown-trigger active" aria-haspopup="true" aria-expanded="false">Company <svg class="chevron" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
         <ul class="nav-dropdown-menu">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="our-values.html">Our Values</a></li>
                     <li><a href="why-ods.html" class="active">Why ODS</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="our-values.html">Our Values</a></li>
         </ul>
       </li>
       <li><a href="services.html">Services</a></li>
+      <li><a href="solutions.html">Solutions</a></li>
       <!-- Knowledge Hub hidden until articles are ready: <li><a href="knowledge-hub.html">Knowledge Hub</a></li> -->
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -89,10 +90,11 @@
   <nav class="menu-links">
     <ul>
       <li><a href="index.html">Home</a></li>
-            <li><a href="why-ods.html" class="active">Why ODS</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="our-values.html">Our Values</a></li>
+            <li><a href="why-ods.html" class="active">Why ODS</a></li>
             <li><a href="services.html">Services</a></li>
+            <li><a href="solutions.html">Solutions</a></li>
             <!-- Knowledge Hub hidden until articles are ready: <li><a href="knowledge-hub.html">Knowledge Hub</a></li> -->
             <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -143,7 +145,7 @@
     <div class="mini-slide" data-index="1">
       <div class="container">
         <span class="eyebrow">Our Clients</span>
-        <h1>Trusted by finance teams across four countries.</h1>
+        <h1>Trusted by finance teams across four markets.</h1>
         <p>From South Africa to the UK, Australia and the USA.</p>
       </div>
     </div>
@@ -206,39 +208,50 @@
     <h2 class="xf-title">Our X-Factor</h2>
     <div class="xf-layout">
     <div class="xf-wrap">
-    <div class="xf-grid">
-    <div class="xf-card xf-teal">
-      <h3>End-User Focus</h3>
-      <p class="xf-sub">Insights, Not Spreadsheets</p>
-      <p>Our discovery sessions and diagnostics identify true operational pain points with key end users at the table.</p>
+    <div class="svc-tabs xf-tabs" role="tablist" aria-label="Our X-Factor">
+      <button type="button" role="tab" class="svc-tab active" id="xf-tab-enduser" aria-controls="xf-panel-enduser" aria-selected="true" tabindex="0">End-User Focus</button>
+      <button type="button" role="tab" class="svc-tab" id="xf-tab-ecosystem" aria-controls="xf-panel-ecosystem" aria-selected="false" tabindex="-1">Tailored Ecosystem</button>
+      <button type="button" role="tab" class="svc-tab" id="xf-tab-experience" aria-controls="xf-panel-experience" aria-selected="false" tabindex="-1">Enhanced User Experience</button>
+      <button type="button" role="tab" class="svc-tab" id="xf-tab-support" aria-controls="xf-panel-support" aria-selected="false" tabindex="-1">Empowering Support</button>
     </div>
-    <div class="xf-card xf-dark">
-      <h3>Tailored Ecosystem</h3>
-      <p class="xf-sub">Technology that adapts to you</p>
-      <p>We use RPA, AI agents and other technologies to integrate the right tools and customise models for the client&rsquo;s workflow and unique business needs.</p>
+    <div class="xf-panels">
+      <div class="svc-panel xf-panel xf-teal active" role="tabpanel" id="xf-panel-enduser" aria-labelledby="xf-tab-enduser">
+        <span class="xf-num">01</span>
+        <h3>End-User Focus</h3>
+        <p class="xf-sub">Insights, Not Spreadsheets</p>
+        <p>Our discovery sessions and diagnostics identify true operational pain points with key end users at the table.</p>
+      </div>
+      <div class="svc-panel xf-panel xf-dark" role="tabpanel" id="xf-panel-ecosystem" aria-labelledby="xf-tab-ecosystem" hidden>
+        <span class="xf-num">02</span>
+        <h3>Tailored Ecosystem</h3>
+        <p class="xf-sub">Technology that adapts to you</p>
+        <p>We use RPA, AI agents and other technologies to integrate the right tools and customise models for the client&rsquo;s workflow and unique business needs.</p>
+      </div>
+      <div class="svc-panel xf-panel xf-dark" role="tabpanel" id="xf-panel-experience" aria-labelledby="xf-tab-experience" hidden>
+        <span class="xf-num">03</span>
+        <h3>Enhanced User Experience</h3>
+        <p class="xf-sub">Clarity Over Clutter</p>
+        <p>We let our tools do the heavy lifting by building dynamic, user-friendly reports and visualizations, giving more focus on analysis &ndash; not compiling.</p>
+      </div>
+      <div class="svc-panel xf-panel xf-orange" role="tabpanel" id="xf-panel-support" aria-labelledby="xf-tab-support" hidden>
+        <span class="xf-num">04</span>
+        <h3>Empowering Support</h3>
+        <p class="xf-sub">Confidence at every step</p>
+        <p>Our training sessions, on-demand tutorials and coaching turn reluctant users into confident analysts.</p>
+      </div>
     </div>
-    <div class="xf-card xf-dark">
-      <h3>Enhanced User Experience</h3>
-      <p class="xf-sub">Clarity Over Clutter</p>
-      <p>We let our tools do the heavy lifting by building dynamic, user-friendly reports and visualizations, giving more focus on analysis &ndash; not compiling.</p>
     </div>
-    <div class="xf-card xf-orange">
-      <h3>Empowering Support</h3>
-      <p class="xf-sub">Confidence at every step</p>
-      <p>Our training sessions, on-demand tutorials and coaching turn reluctant users into confident analysts.</p>
     </div>
   </div>
-    </div>
-    <aside class="xf-note" aria-label="How ODS differs">
-      <span class="xf-note-tag">What sets us apart</span>
-      <p class="xf-note-lead">We differ from other consulting agencies due to our ability to integrate strategy with technology.</p>
-      <h3>Value-added Experience:</h3>
-      <ul>
-        <li>Our implementation process integrates the big picture and the technical execution seamlessly.</li>
-        <li>We prioritize your long-term success through training, knowledge transfer, and ongoing support.</li>
-        <li>By fostering strong working relationships, ODS Consulting ensures your investment continues to deliver measurable value.</li>
-      </ul>
-    </aside>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <span class="eyebrow">Client Logos</span>
+    <div class="logo-grid logo-grid-3">
+      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientAngloGoldAshanti.png" alt="AngloGold Ashanti"></div>
+      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientAtlantisFoundries.png" alt="Atlantis Foundries"></div>
+      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientCBRE.png" alt="CBRE"></div>
     </div>
   </div>
 </section>
@@ -253,17 +266,6 @@
     <div class="testimonial">
       <p>"ODS Consulting resuscitated our manpower model that was difficult to navigate due to its original design. ODS Consulting redesigned and streamlined the model, involving me on the progress every step of the way. This made it a lot easier to understand the updated manpower model with very little training &mdash; now I am excited to see what more can TM1 do."</p>
       <cite style="display:block; margin-top:1rem;">Senior Departmental Controller, Atlantis Foundries</cite>
-    </div>
-  </div>
-</section>
-
-<section class="section-alt">
-  <div class="container">
-    <span class="eyebrow">Client Logos</span>
-    <div class="logo-grid logo-grid-3">
-      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientAngloGoldAshanti.png" alt="AngloGold Ashanti"></div>
-      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientAtlantisFoundries.png" alt="Atlantis Foundries"></div>
-      <div class="logo-slot logo-slot-filled"><img src="Assets/ClientCBRE.png" alt="CBRE"></div>
     </div>
   </div>
 </section>
@@ -302,10 +304,11 @@
       <div>
         <h4>Company</h4>
         <ul>
-          <li><a href="why-ods.html">Why ODS</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="our-values.html">Our Values</a></li>
+          <li><a href="why-ods.html">Why ODS</a></li>
           <li><a href="services.html">Services</a></li>
+          <li><a href="solutions.html">Solutions</a></li>
         </ul>
       </div>
       <div>
