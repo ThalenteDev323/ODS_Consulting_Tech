@@ -814,27 +814,29 @@ document.addEventListener('DOMContentLoaded', function () {
    Click a tab (or use the arrow keys) to show that service.
    ============================================================ */
 (function(){
-  var tabs=[].slice.call(document.querySelectorAll('.svc-tab'));
-  if(!tabs.length) return;
-  function show(tab,focus){
-    tabs.forEach(function(t){
-      var on=t===tab, p=document.getElementById(t.getAttribute('aria-controls'));
-      t.classList.toggle('active',on);
-      t.setAttribute('aria-selected',on?'true':'false');
-      t.tabIndex=on?0:-1;
-      if(p){ p.classList.toggle('active',on); if(on){p.removeAttribute('hidden');}else{p.setAttribute('hidden','');} }
-    });
-    if(focus) tab.focus();
-  }
-  tabs.forEach(function(t,i){
-    t.addEventListener('click',function(){show(t,false);});
-    t.addEventListener('keydown',function(e){
-      var n=null;
-      if(e.key==='ArrowRight') n=tabs[(i+1)%tabs.length];
-      else if(e.key==='ArrowLeft') n=tabs[(i-1+tabs.length)%tabs.length];
-      else if(e.key==='Home') n=tabs[0];
-      else if(e.key==='End') n=tabs[tabs.length-1];
-      if(n){e.preventDefault();show(n,true);}
+  [].slice.call(document.querySelectorAll('.svc-tabs')).forEach(function(group){
+    var tabs=[].slice.call(group.querySelectorAll('.svc-tab'));
+    if(!tabs.length) return;
+    function show(tab,focus){
+      tabs.forEach(function(t){
+        var on=t===tab, p=document.getElementById(t.getAttribute('aria-controls'));
+        t.classList.toggle('active',on);
+        t.setAttribute('aria-selected',on?'true':'false');
+        t.tabIndex=on?0:-1;
+        if(p){ p.classList.toggle('active',on); if(on){p.removeAttribute('hidden');}else{p.setAttribute('hidden','');} }
+      });
+      if(focus) tab.focus();
+    }
+    tabs.forEach(function(t,i){
+      t.addEventListener('click',function(){show(t,false);});
+      t.addEventListener('keydown',function(e){
+        var n=null;
+        if(e.key==='ArrowRight') n=tabs[(i+1)%tabs.length];
+        else if(e.key==='ArrowLeft') n=tabs[(i-1+tabs.length)%tabs.length];
+        else if(e.key==='Home') n=tabs[0];
+        else if(e.key==='End') n=tabs[tabs.length-1];
+        if(n){e.preventDefault();show(n,true);}
+      });
     });
   });
 })();
@@ -862,4 +864,48 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function(){ if(box.parentNode) box.parentNode.removeChild(box); },300);
   });
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',show); else show();
+})();
+
+
+/* ============================================================
+   HOW WE WORK cards (home) -> Services page "How We Work" tabs
+   Cards carry data-href="services.html#how-we-work-<step>".
+   On the Services page, that hash opens the matching tab and
+   scrolls to the section.
+   ============================================================ */
+(function(){
+  [].slice.call(document.querySelectorAll('.process-step[data-href]')).forEach(function(card){
+    card.style.cursor='pointer';
+    function go(){ window.location.href=card.getAttribute('data-href'); }
+    card.addEventListener('click',go);
+    card.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+  });
+  setTimeout(function(){
+  var m=/^#how-we-work(?:-(\w+))?$/.exec(window.location.hash||'');
+  var sec=document.getElementById('how-we-work');
+  if(m && sec){
+    var tab=m[1]?document.getElementById('hw-tab-'+m[1]):null;
+    if(window.odsOpenHowWeWork) window.odsOpenHowWeWork();
+    if(tab) tab.click();
+    setTimeout(function(){ sec.scrollIntoView({behavior:'smooth',block:'start'}); },tab?200:50);
+  }
+  },0);
+})();
+
+
+/* ============================================================
+   HOW WE WORK (Services): collapsed by default.
+   The "See more on how we work" button reveals / hides it.
+   ============================================================ */
+(function(){
+  var btn=document.getElementById('hwToggle'), body=document.getElementById('hwBody');
+  if(!btn||!body) return;
+  function set(open){
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.classList.toggle('open',open);
+    btn.firstChild.nodeValue=open?'Show less ':'See more on how we work ';
+    if(open){ body.removeAttribute('hidden'); } else { body.setAttribute('hidden',''); }
+  }
+  btn.addEventListener('click',function(){ set(btn.getAttribute('aria-expanded')!=='true'); });
+  window.odsOpenHowWeWork=function(){ set(true); };
 })();
