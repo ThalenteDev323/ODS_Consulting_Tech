@@ -68,9 +68,16 @@
         </ul>
       </li>
       <li><a href="services.html" class="active">Services</a></li>
-      <li><a href="solutions.html">Solutions</a></li>
+      <li class="nav-dropdown">
+        <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">Solutions <svg class="chevron" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <ul class="nav-dropdown-menu">
+          <li><a href="solutions.html#planning-analytics">IBM Planning Analytics</a></li>
+          <li><a href="solutions.html#power-bi">Microsoft Power BI</a></li>
+          <li><a href="solutions.html#data-automation">Data Centralisation &amp; Automation</a></li>
+        </ul>
+      </li>
       <!-- Knowledge Hub hidden until articles are ready: <li><a href="knowledge-hub.html">Knowledge Hub</a></li> -->
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
     </ul>
     <a href="contact.html" class="nav-cta">Get in touch <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10.5" y2="13.5"/><path d="M21 3 14.5 21l-3-7.5L3 10.5z"/></svg></a>
     <a href="#" class="nav-social" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="7.5" cy="7" r="0.9" fill="currentColor" stroke="none"/><line x1="7.5" y1="10.2" x2="7.5" y2="16.5"/><line x1="11.7" y1="10.2" x2="11.7" y2="16.5"/><path d="M11.7 13a2 2 0 0 1 4 0v3.5"/></svg></a>
@@ -97,7 +104,7 @@
             <li><a href="services.html" class="active">Services</a></li>
             <li><a href="solutions.html">Solutions</a></li>
             <!-- Knowledge Hub hidden until articles are ready: <li><a href="knowledge-hub.html">Knowledge Hub</a></li> -->
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
     </ul>
   </nav>
   <div class="menu-panel-footer">
@@ -160,27 +167,32 @@
     <h2>Core capabilities and ongoing support.</h2>
     <div class="cap-rows">
     <article class="cap-row" data-num="01">
-      <div class="svc-media"><img src="Assets/Graphs.jpg" alt="Reviewing an automated report"></div>
+      <div class="svc-media"><img src="Assets/3DConsulting.jpg" alt="A consultant presenting a project board to colleagues: Design, Develop and Deploy"></div>
       <div class="svc-info">
         <span class="svc-tag">Core Capability</span>
-        <h3>Data Centralisation &amp; Automation</h3>
-        <p class="svc-lead">We unlock the full power of Planning Analytics and Power BI by centralizing your data and automating workflows with SQL, Python, Microsoft Power Automate, and more &mdash; so teams spend less time on spreadsheets and more time on insights that drive decisions.</p>
-        <div class="svc-cards svc-cards-two">
-          <div class="svc-card svc-before"><em>Before</em><span>Hours lost to copy-pasting between spreadsheets and systems that don't talk.</span></div>
-          <div class="svc-card svc-after"><em>After</em><span>Centralised data and automated workflows, with your time freed up.</span></div>
+        <h3>3D Consulting (Design, Develop &amp; Deploy)</h3>
+        <div class="svc-tabs d3-tabs" role="tablist" aria-label="3D Consulting">
+          <button type="button" role="tab" class="svc-tab active" id="d3-tab-design" aria-controls="d3-panel-design" aria-selected="true" tabindex="0"><span class="d3-n">01</span> Design</button>
+          <button type="button" role="tab" class="svc-tab" id="d3-tab-develop" aria-controls="d3-panel-develop" aria-selected="false" tabindex="-1"><span class="d3-n">02</span> Develop</button>
+          <button type="button" role="tab" class="svc-tab" id="d3-tab-deploy" aria-controls="d3-panel-deploy" aria-selected="false" tabindex="-1"><span class="d3-n">03</span> Deploy</button>
         </div>
-        <div class="svc-cards">
-          <div class="svc-card"><strong>Data warehousing</strong></div>
-          <div class="svc-card"><strong>Automated pipelines &amp; refreshes</strong></div>
-          <div class="svc-card"><strong>SQL &amp; Python</strong></div>
-          <div class="svc-card"><strong>Microsoft Power Automate workflows</strong><span>Approvals, alerts and refreshes without the manual steps</span></div>
-          <div class="svc-card" style="grid-column:1 / -1;"><strong>RPA where it saves time</strong></div>
+        <div class="svc-panel d3-panel active" role="tabpanel" id="d3-panel-design" aria-labelledby="d3-tab-design">
+          <h4>Design</h4>
+          <p>We work closely with your team to understand business challenges and translate requirements into tailored IBM Planning Analytics and Microsoft Power BI solutions. By combining technical expertise with business analytics and project management, we ensure every solution aligns with your strategic objectives and delivers measurable value.</p>
         </div>
-        <div class="svc-actions"><a href="contact.html?subject=Enquiry%20for%20Data%20Centralisation%20%26%20Automation" class="btn btn-primary">Talk to us about automation</a></div>
+        <div class="svc-panel d3-panel" role="tabpanel" id="d3-panel-develop" aria-labelledby="d3-tab-develop" hidden>
+          <h4>Develop</h4>
+          <p>We build and integrate planning models, financial calculations, automated data processes and interactive dashboards that reduce manual effort, improve reporting accuracy and provide greater visibility into business performance. Our multidisciplinary skillset ensures that business requirements, data and technology work together seamlessly.</p>
+        </div>
+        <div class="svc-panel d3-panel" role="tabpanel" id="d3-panel-deploy" aria-labelledby="d3-tab-deploy" hidden>
+          <h4>Deploy</h4>
+          <p>We rigorously test and implement solutions into production, providing project management, user training, documentation and ongoing support to ensure successful adoption and sustainable performance. By bringing together development, business analytics and project delivery under one roof, ODS Consulting offers a one-stop partner for your end-to-end systems development needs.</p>
+        </div>
+        <div class="svc-actions"><a href="contact.html?subject=Enquiry%20for%203D%20Consulting" class="btn btn-primary">Talk to us about 3D Consulting</a></div>
       </div>
     </article>
     <article class="cap-row cap-row-flip" data-num="02">
-      <div class="svc-media"><img src="Assets/TeamPhoto.jpg" alt="Team training session"></div>
+      <div class="svc-media"><img src="Assets/Training.jpg" alt="A trainer talking with a group of learners in a computer classroom"></div>
       <div class="svc-info">
         <span class="svc-tag">Ongoing Support</span>
         <h3>Training &amp; Change Management</h3>
