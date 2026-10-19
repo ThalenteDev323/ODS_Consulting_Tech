@@ -891,3 +891,105 @@ document.addEventListener('DOMContentLoaded', function () {
   btn.addEventListener('click',function(){ set(btn.getAttribute('aria-expanded')!=='true'); });
   window.odsOpenHowWeWork=function(){ set(true); };
 })();
+
+
+/* ============================================================
+   MAIL POP-IN (home page only)
+   1 minute after the home page opens, a small mail icon slides in
+   at the bottom-right, then opens into a message with Siya's comment
+   (15 seconds). After that a second mail pops in and shows each client
+   testimonial in turn (15 seconds each), every one at a different spot. Change the wording
+   and timings in the two lists / settings just below.
+   ============================================================ */
+(function(){
+  if(!document.body.hasAttribute('data-mail-popup')) return;
+
+  var FIRST_DELAY   = 60000;   // 1 minute after the page opens
+  var FIRST_VISIBLE = 15000;   // first message stays 15 seconds
+  var GAP           = 2500;    // pause between the two pop-ins
+  var ROTATE_EVERY  = 15000;   // testimonials change every 15 seconds
+
+  var SIYA = {
+    label:'A note from Siya',
+    text:'\u201CIt\u2019s not about what we build. It\u2019s about how we walk with you while we build it.\u201D',
+    who:'Siya Mayeza, ODS Consulting Managing Director'
+  };
+  var TESTIMONIALS = [
+    { label:'What our clients say',
+      text:'“Our variance analysis report was excel-driven and extremely tedious… ODS Consulting created such a fluid Planning Analytics Workspace report… and has saved us 3 days in the process.”',
+      who:'Financial KPI Analytics Manager, AngloGold Ashanti' },
+    { label:'What our clients say',
+      text:'“ODS Consulting redesigned and streamlined the model, involving me on the progress every step of the way. This made it a lot easier to understand the updated manpower model with very little training.”',
+      who:'Senior Departmental Controller, Atlantis Foundries' },
+    { label:'What our clients say',
+      text:'“We use IBM Planning Analytics to drive our global Forecasting and Planning processes… Siya Mayeza has been instrumental in ensuring the system truly meets our needs.”',
+      who:'Senior Global Finance Processes Architect, CBRE' }
+  ];
+
+  var el=document.createElement('aside');
+  el.className='mail-pop';
+  el.setAttribute('role','status');
+  el.setAttribute('aria-live','polite');
+  el.innerHTML=
+    '<div class="mail-pop-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg><span class="mail-pop-dot"></span></div>'+
+    '<div class="mail-pop-body"><div class="mail-pop-inner">'+
+      '<button type="button" class="mail-pop-close" aria-label="Close message">&times;</button>'+
+      '<span class="mail-pop-label"></span>'+
+      '<blockquote class="mail-pop-text"></blockquote>'+
+      '<cite class="mail-pop-who"></cite>'+
+    '</div></div>';
+  var label=el.querySelector('.mail-pop-label'),
+      text=el.querySelector('.mail-pop-text'),
+      who=el.querySelector('.mail-pop-who'),
+      inner=el.querySelector('.mail-pop-inner');
+
+  var timers=[], stopped=false, hovering=false;
+  function later(fn,ms){ var t=setTimeout(fn,ms); timers.push(t); return t; }
+  var SPOTS=['bottom-right','bottom-left','mid-right','mid-left'], lastSpot='';
+  function pickSpot(){
+    var opts=SPOTS.filter(function(x){ return x!==lastSpot; });
+    lastSpot=opts[Math.floor(Math.random()*opts.length)];
+    return lastSpot;
+  }
+  function fill(m){ label.textContent=m.label; text.textContent=m.text; who.textContent=m.who; }
+  function close(done){
+    el.classList.remove('open');
+    later(function(){ el.classList.remove('show'); later(function(){ if(el.parentNode) el.parentNode.removeChild(el); if(done) done(); },500); },450);
+  }
+  function openMail(m){
+    fill(m);
+    var spot=pickSpot();                             // a different spot from the last pop-in
+    var left=spot.indexOf('left')>-1, mid=spot.indexOf('mid')>-1;
+    el.classList.toggle('left',left);
+    el.style.bottom=''; el.style.top='';
+    if(!el.parentNode) document.body.appendChild(el);
+    var ck=document.querySelector('.cookie-notice');   // keep clear of the cookie notice (bottom-left)
+    if(mid){ el.style.bottom='auto'; el.style.top='42%'; }
+    else if(left && ck){ el.style.bottom=(ck.offsetHeight+36)+'px'; }
+    void el.offsetWidth;
+    el.classList.add('show');                       // 1. the mail icon slides in
+    later(function(){ el.classList.add('open'); },1100); // 2. then the message opens
+  }
+  el.querySelector('.mail-pop-close').addEventListener('click',function(){
+    stopped=true; timers.forEach(clearTimeout); timers=[]; close();
+  });
+  el.addEventListener('mouseenter',function(){ hovering=true; });
+  el.addEventListener('mouseleave',function(){ hovering=false; });
+
+  function startRotation(i){
+    if(stopped) return;
+    openMail(TESTIMONIALS[i]);                       // each testimonial pops in at a new spot
+    later(function(){
+      if(stopped) return;
+      close(function(){ if(i+1<TESTIMONIALS.length) later(function(){ startRotation(i+1); },800); });
+    },1100+ROTATE_EVERY);
+  }
+
+  later(function(){
+    openMail(SIYA);
+    later(function(){
+      if(stopped) return;
+      close(function(){ later(function(){ startRotation(0); },GAP); });
+    },1100+FIRST_VISIBLE);
+  },FIRST_DELAY);
+})();
