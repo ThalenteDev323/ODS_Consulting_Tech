@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 1b) "COMPANY" DROPDOWN IN THE TOP NAV
+  // 1b) TOP-NAV DROPDOWNS ("COMPANY" and "SOLUTIONS")
   // Opens on hover (mouse users see it immediately, no click
   // needed) with a short delay before closing so moving the mouse
   // from the button down into the menu doesn't accidentally close
@@ -80,10 +80,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // users), closes when clicking elsewhere, choosing a link inside
   // it, or pressing Escape.
   // ------------------------------------------------------------
-  var dropdownWrap = document.querySelector('.nav-dropdown');
-  var dropdownTrigger = document.querySelector('.nav-dropdown-trigger');
-  var dropdownMenu = document.querySelector('.nav-dropdown-menu');
-  if (dropdownWrap && dropdownTrigger && dropdownMenu) {
+  [].slice.call(document.querySelectorAll('.nav-dropdown')).forEach(function (dropdownWrap) {
+    var dropdownTrigger = dropdownWrap.querySelector('.nav-dropdown-trigger');
+    var dropdownMenu = dropdownWrap.querySelector('.nav-dropdown-menu');
+    if (!dropdownTrigger || !dropdownMenu) return;
     var closeTimer;
 
     function openDropdown() {
@@ -119,28 +119,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeDropdownNow();
     });
-  }
+  });
 
   // ------------------------------------------------------------
-  // 2) MOBILE TOP-NAV DROPDOWN
-  // NOTE: the right-side hamburger this used to control has been
-  // removed from every page (the left-side "Menu" panel is now the
-  // only mobile navigation). This block is harmless leftover code -
-  // it just does nothing if .nav-toggle doesn't exist on the page.
-  // On small screens the main horizontal nav links collapse
-  // behind a hamburger icon (separate from the left-side menu
-  // above). This just shows/hides that dropdown list.
-  // ------------------------------------------------------------
-  var toggle = document.querySelector('.nav-toggle');
-  var links = document.querySelector('.nav-links');
-  if (toggle && links) {
-    toggle.addEventListener('click', function () {
-      links.classList.toggle('open');
-    });
-  }
-
-  // ------------------------------------------------------------
-  // 3) HOMEPAGE HERO SLIDESHOW
+  // 2) HOMEPAGE HERO SLIDESHOW
   // Only runs on index.html (it looks for #hero-slider, which
   // doesn't exist on the other pages, so this whole block is
   // skipped everywhere else). Auto-advances through the slides
@@ -255,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ------------------------------------------------------------
-  // 4) CONTACT FORM (contact.html only)
+  // 3) CONTACT FORM (contact.html only)
   // Submits to Formspree (see the big comment above the <form> tag
   // in contact.html for the one-time setup needed) - Formspree takes
   // the submission and forwards it to hello@odsconsulting.tech as a
@@ -379,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 5) SCROLL PROGRESS BAR
+  // 4) SCROLL PROGRESS BAR
   // The thin bar fixed to the top of every page. Its width tracks
   // how far down the page the visitor has scrolled (0% at the top,
   // 100% at the bottom); the dashed pattern inside it keeps sliding
@@ -399,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 6) ANIMATED STAT COUNTERS
+  // 5) ANIMATED STAT COUNTERS
   // The "16+ / 4 / 2" numbers in the homepage intro section. Each
   // one has a data-count-to="16" attribute (and an optional
   // data-suffix="+") in the HTML. When the numbers scroll into
@@ -449,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 7) SUBTLE PARALLAX ON THE HERO GRAPHICS
+  // 6) SUBTLE PARALLAX ON THE HERO GRAPHICS
   // As the mouse moves over the homepage hero, its background
   // graphic (line chart / bars / network) shifts a few pixels in
   // the same direction - a common "depth" effect. Skipped
@@ -479,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 8) ANIMATED "HOW WE WORK" DIAGRAM
+  // 7) ANIMATED "HOW WE WORK" DIAGRAM
   // The four steps (Discover / Adapt / Analyse / Train) start
   // dimmed. As each one scrolls into view it "lights up" (its
   // circle badge fills solid white, its text brightens), and the
@@ -516,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ------------------------------------------------------------
-  // 9) POP-UP PANES THAT OPEN ON HOVER
+  // 8) POP-UP PANES THAT OPEN ON HOVER
   // Used by the Services "What We Deliver" cards and the Our Values
   // cards. Each card has data-modal="tm1" (or "clarity" etc) that
   // matches a pane with id="modal-tm1".
@@ -538,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Touch-screen laptops (and some browsers) answer that question wrongly,
   // which used to switch hover off even though a mouse was in use.
   // ------------------------------------------------------------
-  var hoverCards = document.querySelectorAll('.value-card[data-modal], .capability-card[data-modal], .glance-card[data-modal]');
+  var hoverCards = document.querySelectorAll('.value-card[data-modal], .glance-card[data-modal]');
   var hoverOverlay = document.getElementById('modalOverlay');
   if (hoverCards.length && hoverOverlay) {
     var HAS_POINTER_EVENTS = !!window.PointerEvent;
@@ -570,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (vMouseX < 0) return null;
       var els = document.elementsFromPoint(vMouseX, vMouseY);
       for (var i = 0; i < els.length; i++) {
-        var c = els[i].closest ? els[i].closest('.value-card, .capability-card, .glance-card') : null;
+        var c = els[i].closest ? els[i].closest('.value-card, .glance-card') : null;
         if (c) return c;
       }
       return null;
@@ -657,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (e) {         // click anywhere else closes it
       if (!vOpenPane) return;
       if (vOpenPane.contains(e.target)) return;
-      if (e.target.closest && e.target.closest('.value-card, .capability-card, .glance-card')) return;
+      if (e.target.closest && e.target.closest('.value-card, .glance-card')) return;
       vClose();
     });
     window.addEventListener('scroll', function () {           // scrolling the page away closes a mouse-opened pane
@@ -671,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function () {
    Plays the video only while it is on screen; pauses when scrolled away.
 --------------------------------------------------------------- */
 (function () {
-  var vid = document.querySelector('.video-frame video, .video-full video');
+  var vid = document.querySelector('.video-frame video');
   if (!vid) return;
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
