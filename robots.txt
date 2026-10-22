@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Add the sitemap line once the live address is known:
-# Sitemap: https://YOUR-DOMAIN/sitemap.xml
+Sitemap: https://www.odsconsulting.tech/sitemap.xml
