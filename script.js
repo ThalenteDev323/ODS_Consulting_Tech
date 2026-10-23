@@ -993,3 +993,25 @@ document.addEventListener('DOMContentLoaded', function () {
     },1100+FIRST_VISIBLE);
   },FIRST_DELAY);
 })();
+
+
+/* ============================================================
+   POP-UP PICTURES: load only when a pop-up is about to open
+   Pictures inside hidden pop-ups carry data-src instead of src,
+   so visitors do not download them (some are large) until they
+   hover, focus or click a card/button that opens that pop-up.
+   ============================================================ */
+(function(){
+  function loadPane(id){
+    var pane=document.getElementById(id); if(!pane) return;
+    [].slice.call(pane.querySelectorAll('img[data-src]')).forEach(function(img){
+      img.src=img.getAttribute('data-src'); img.removeAttribute('data-src');
+    });
+  }
+  function handler(e){
+    var t=e.target.closest ? e.target.closest('[data-modal],[data-learn]') : null;
+    if(!t) return;
+    loadPane('modal-'+(t.getAttribute('data-modal')||t.getAttribute('data-learn')));
+  }
+  ['pointerover','touchstart','focusin','click'].forEach(function(ev){ document.addEventListener(ev,handler,{passive:true}); });
+})();
